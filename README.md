@@ -8,6 +8,6 @@ This repository contains a series of five blogs created as part of the CS5805 co
 4. Classification
 5. Anomaly/Outlier detection
    
-**Guidance: Martin Skarzynski**
+**Under Guidance of: Dr. Martin Skarzynski**
 
 Feel free to explore each blog for insights into these machine learning concepts.
