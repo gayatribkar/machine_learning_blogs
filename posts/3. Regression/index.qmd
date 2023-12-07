@@ -1,0 +1,255 @@
+---
+title: "A Comprehensive Analysis of Linear and Non-Linear Regression in Advertising Data (BLOG ON LINEAR AND NON LINEAR REGRESSION)"
+author: "Gayatri Milind Bhatambarekar"
+date: today
+categories: [Exploratory Data Analysis (EDA), Linear Regression, Polynomial Regression, Neural Network Regression]
+image: "Advertising_img.png"
+editor_options: 
+  chunk_output_type: console
+---
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+
+</style>
+
+In the dynamic world of marketing and advertising, gaining insights into the influence of diverse channels on sales performance is crucial for strategic decision-making. The advertising dataset serves as a valuable repository, unveiling details about budget allocations across pivotal platforms like TV, radio, and newspapers, juxtaposed against their respective impacts on sales. This information empowers marketers to discern the most effective channels, optimize resource allocation, and refine strategies, ultimately enhancing the overall return on investment and fostering data-driven precision in the dynamic landscape of advertising and sales optimization.
+
+
+
+**Exploring the customer behavior dataset**
+
+```{python}
+
+# Importing necessary libraries
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+# Load the dataset
+df1 = pd.read_csv("Advertising.csv")
+df1.head()
+
+
+```
+
+The dataset comprises information about the advertising budget for TV, radio, and newspaper, along with the corresponding sales figures. To start our analysis, we will first drop the unnecessary 'Unnamed:0' column.
+
+```{python}
+df = df1.drop(df1.columns[0], axis=1)
+df.head()
+
+```
+
+```{python}
+# Checking the shape and data types of the dataset
+print(df.shape)
+
+```
+
+```{python}
+# Descriptive statistics of the dataset
+df.describe()
+```
+
+**Visualizing the Data Distribution**
+
+Understanding the distribution of each feature in the dataset is crucial for gaining insights. Let's create histograms to visualize the distribution of TV, radio, and newspaper budgets.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(9, 5))
+for i, variable in enumerate(df1.iloc[:, 1:]):
+    plt.subplot(2, 2, i + 1)
+    sns.histplot(df1[variable], kde=True, bins=20)
+    plt.title(f'Distribution of {variable}')
+    plt.tight_layout()
+
+plt.show()
+
+```
+These histograms provide a quick overview of the distribution of advertising budgets across different channels. It's interesting to note the varying ranges and patterns in the data.
+
+```{python}
+# Scatter plot for TV vs Sales
+plt.figure(figsize=(6, 4))
+
+plt.subplot(1, 3, 1)
+plt.scatter(df['TV'], df['Sales'], color='blue', alpha=0.7)
+plt.title('TV Budget vs Sales')
+plt.xlabel('TV Budget')
+plt.ylabel('Sales')
+
+# Scatter plot for Radio vs Sales
+plt.subplot(1, 3, 2)
+plt.scatter(df['Radio'], df['Sales'], color='green', alpha=0.7)
+plt.title('Radio Budget vs Sales')
+plt.xlabel('Radio Budget')
+plt.ylabel('Sales')
+
+# Scatter plot for Newspaper vs Sales
+plt.subplot(1, 3, 3)
+plt.scatter(df['Newspaper'], df['Sales'], color='red', alpha=0.7)
+plt.title('Newspaper Budget vs Sales')
+plt.xlabel('Newspaper Budget')
+plt.ylabel('Sales')
+
+plt.tight_layout()
+plt.show()
+```
+This set of three scatter plots visually illustrates the relationship between advertising budgets allocated to TV, radio, and newspaper channels and their respective impacts on sales. Each subplot reveals the distribution of sales across different budget ranges, providing a clear snapshot of the potential associations between advertising investments in each channel and resulting sales figures. 
+
+**Exploring Correlations**
+
+To understand the relationships between variables, a correlation matrix is constructed and visualized using a heatmap.
+
+```{python}
+correlation_matrix = df.corr()
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=.5)
+plt.title('Correlation Matrix')
+plt.show()
+
+```
+This heatmap helps us identify correlations between different advertising channels and sales. It becomes apparent that TV has a higher correlation with sales compared to radio and newspaper.
+
+
+**Linear Regression Analysis**
+
+Moving on to predictive analytics, we split the data into training and testing sets and perform linear regression analysis.
+
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Split the data
+X = df.drop(['Sales'], axis=1)
+y = df['Sales']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+print(f'Mean Squared Error: {mse}')
+
+```
+
+The mean squared error gives us an indication of the model's performance. Lower values signify a better fit.
+
+```{python}
+fig = plt.figure(figsize=(10, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+ax.scatter(X_test['Newspaper'], X_test['TV'], y_test, c='black', marker='o', label='Actual')
+ax.scatter(X_test['Newspaper'], X_test['TV'], y_pred, c='blue', marker='^', label='Predicted')
+
+ax.set_xlabel('Newspaper Budget')
+ax.set_ylabel('Television Budget')
+ax.set_zlabel('Sales')
+ax.legend()
+ax.set_title('Multivariate Linear Regression Predictions vs Actual')
+
+plt.show()
+```
+The above 3D scatter plot contrasts actual sales with predictions from a Multivariate Linear Regression model, revealing the model's efficacy in capturing the impact of Newspaper and Television advertising budgets on sales. The visual distinction between actual and predicted values offers a concise evaluation of the model's accuracy in multivariate sales forecasting.
+
+**Polynomial Regression Analysis**
+
+Polynomial regression is a powerful analytical technique employed to model relationships between variables that may not be linear. Imagine data points forming curves or intricate patterns rather than following a straightforward path. Polynomial regression allows us to capture these non-linear relationships by introducing higher-degree terms in our model. To capture potential non-linear relationships in our data, we explore polynomial regression with different degrees.
+
+```{python}
+from sklearn.preprocessing import PolynomialFeatures
+
+degrees = np.arange(1, 11)
+costs = []
+
+for degree in degrees:
+    poly = PolynomialFeatures(degree=degree)
+    X_train_poly = poly.fit_transform(X_train)
+    X_test_poly = poly.transform(X_test)
+
+    model = LinearRegression()
+    model.fit(X_train_poly, y_train)
+    y_pred = model.predict(X_test_poly)
+
+    mse_poly = mean_squared_error(y_test, y_pred)
+    costs.append(mse_poly)
+
+# Plot the cost for each degree
+plt.xlim([0, 10])
+plt.ylim([0, 10])
+plt.plot(degrees, costs, marker='o')
+plt.xlabel('Polynomial Degree')
+plt.ylabel('Mean Squared Error (Cost)')
+plt.title('Polynomial Regression Analysis')
+plt.show()
+
+
+```
+
+The plot reveals that a polynomial degree of 3 yields the minimum mean squared error, indicating a good compromise between bias and variance.
+
+**Neural Network Regression**
+
+For a more complex model, we delve into neural network regression using TensorFlow. 
+Neural network regression, involves constructing a multilayer perceptron capable of learning complex patterns for predicting continuous outputs. Utilizing ReLU activation functions for non-linearity, the model excels in capturing intricate relationships. Inspired by the human brain, neural networks undergo training to optimize weights, making them adept at nonlinear regression tasks. 
+
+
+```{python}
+import tensorflow as tf
+
+model = tf.keras.models.Sequential()
+model.add(tf.keras.layers.Dense(10, input_dim=X_train.shape[1], activation='relu'))
+model.add(tf.keras.layers.Dense(10, activation='relu'))
+model.add(tf.keras.layers.Dense(10, activation='relu'))
+model.add(tf.keras.layers.Dense(1, activation='linear'))
+
+model.compile(loss='mean_squared_error', optimizer='adam')
+
+history = model.fit(X_train, y_train, epochs=200, batch_size=16, validation_data=(X_test, y_test))
+
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Neural Network Loss vs Epochs')
+plt.legend()
+plt.show()
+
+neural_pred = model.predict(X_test)
+
+mse_neural = mean_squared_error(neural_pred, y_test)
+
+print(f'Mean Squared Error: {mse_neural}')
+
+
+```
+
+The neural network model is trained and validated, and the mean squared error is computed.
+
+**Conclusion**
+
+In conclusion, the advertising dataset provides a fascinating journey into the world of predictive analytics. From understanding data distributions to exploring correlations and implementing various regression techniques, we've gained valuable insights into the impact of advertising budgets on sales. Whether through linear regression, polynomial regression, or neural networks, the tools at our disposal allow us to make informed decisions.
+
+This analysis serves as a foundation for further exploration and refinement, empowering marketers to optimize their strategies and maximize the impact of advertising budgets on sales.
+
+<div class="footer">
+
+  <hr>
+
+  <h3>Connect with me on GitHub</h3>
+  <p>Find more projects and articles on my [GitHub](https://github.com/gayatribkar).</p>
+</div>

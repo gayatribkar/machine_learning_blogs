@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Gayatri Milind Bhatambarekar">
+<meta name="dcterms.date" content="2023-12-07">
+
+<title>My Blogs - Exploring Diabetes Prediction Models: A Comparative Analysis (BLOG ON CLASSIFICATION)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="text/javascript">
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+if (typeof require !== 'undefined') {
+require.undef("plotly");
+requirejs.config({
+    paths: {
+        'plotly': ['https://cdn.plot.ly/plotly-2.27.0.min']
+    }
+});
+require(['plotly'], function(Plotly) {
+    window._Plotly = Plotly;
+});
+}
+</script>
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Blogs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/gayatribkar" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gayatri-bhatambarekar/" rel="" target=""><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Exploring Diabetes Prediction Models: A Comparative Analysis (BLOG ON CLASSIFICATION)</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Exploratory Data Analysis (EDA)</div>
+                <div class="quarto-category">Classification</div>
+                <div class="quarto-category">K-Nearest Neighbors</div>
+                <div class="quarto-category">Support Vector Classifier</div>
+                <div class="quarto-category">Decision Tree Classifier</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Gayatri Milind Bhatambarekar </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 7, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+</style>
+<p>Diabetes is a widespread health concern affecting a large population globally. Identifying diabetes in its early stages poses a significant challenge, emphasizing the crucial role of advanced technologies in healthcare. Among these, machine learning models have emerged as invaluable tools for predicting the likelihood of diabetes onset. This blog focuses on three key classification algorithms—K-nearest neighbors (KNN), Support Vector Classifier (SVC), and Decision Tree Classifier (DTC). By understanding and comparing their strengths and nuances, we gain insights into the contributions of machine learning to healthcare, specifically in the context of diabetes identification.</p>
+<p><strong>Data Exploration and Preprocessing</strong></p>
+<p>Let’s start by loading and exploring the diabetes dataset. We will examine the data’s structure, and summary statistics to understand the relationships between features.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading the dataset</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'diabetes.csv'</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Displaying the first 10 rows of the dataset</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Pregnancies</th>
+<th data-quarto-table-cell-role="th">Glucose</th>
+<th data-quarto-table-cell-role="th">BloodPressure</th>
+<th data-quarto-table-cell-role="th">SkinThickness</th>
+<th data-quarto-table-cell-role="th">Insulin</th>
+<th data-quarto-table-cell-role="th">BMI</th>
+<th data-quarto-table-cell-role="th">DiabetesPedigreeFunction</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>6</td>
+<td>148</td>
+<td>72</td>
+<td>35</td>
+<td>0</td>
+<td>33.6</td>
+<td>0.627</td>
+<td>50</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>85</td>
+<td>66</td>
+<td>29</td>
+<td>0</td>
+<td>26.6</td>
+<td>0.351</td>
+<td>31</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>8</td>
+<td>183</td>
+<td>64</td>
+<td>0</td>
+<td>0</td>
+<td>23.3</td>
+<td>0.672</td>
+<td>32</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>89</td>
+<td>66</td>
+<td>23</td>
+<td>94</td>
+<td>28.1</td>
+<td>0.167</td>
+<td>21</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0</td>
+<td>137</td>
+<td>40</td>
+<td>35</td>
+<td>168</td>
+<td>43.1</td>
+<td>2.288</td>
+<td>33</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>5</td>
+<td>116</td>
+<td>74</td>
+<td>0</td>
+<td>0</td>
+<td>25.6</td>
+<td>0.201</td>
+<td>30</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>3</td>
+<td>78</td>
+<td>50</td>
+<td>32</td>
+<td>88</td>
+<td>31.0</td>
+<td>0.248</td>
+<td>26</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>10</td>
+<td>115</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>35.3</td>
+<td>0.134</td>
+<td>29</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2</td>
+<td>197</td>
+<td>70</td>
+<td>45</td>
+<td>543</td>
+<td>30.5</td>
+<td>0.158</td>
+<td>53</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>8</td>
+<td>125</td>
+<td>96</td>
+<td>0</td>
+<td>0</td>
+<td>0.0</td>
+<td>0.232</td>
+<td>54</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking the shape and data types of the dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.dtypes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(768, 9)
+Pregnancies                   int64
+Glucose                       int64
+BloodPressure                 int64
+SkinThickness                 int64
+Insulin                       int64
+BMI                         float64
+DiabetesPedigreeFunction    float64
+Age                           int64
+Outcome                       int64
+dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Descriptive statistics of the dataset</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Pregnancies</th>
+<th data-quarto-table-cell-role="th">Glucose</th>
+<th data-quarto-table-cell-role="th">BloodPressure</th>
+<th data-quarto-table-cell-role="th">SkinThickness</th>
+<th data-quarto-table-cell-role="th">Insulin</th>
+<th data-quarto-table-cell-role="th">BMI</th>
+<th data-quarto-table-cell-role="th">DiabetesPedigreeFunction</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+<td>768.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>3.845052</td>
+<td>120.894531</td>
+<td>69.105469</td>
+<td>20.536458</td>
+<td>79.799479</td>
+<td>31.992578</td>
+<td>0.471876</td>
+<td>33.240885</td>
+<td>0.348958</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>3.369578</td>
+<td>31.972618</td>
+<td>19.355807</td>
+<td>15.952218</td>
+<td>115.244002</td>
+<td>7.884160</td>
+<td>0.331329</td>
+<td>11.760232</td>
+<td>0.476951</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.078000</td>
+<td>21.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>1.000000</td>
+<td>99.000000</td>
+<td>62.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>27.300000</td>
+<td>0.243750</td>
+<td>24.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>3.000000</td>
+<td>117.000000</td>
+<td>72.000000</td>
+<td>23.000000</td>
+<td>30.500000</td>
+<td>32.000000</td>
+<td>0.372500</td>
+<td>29.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>6.000000</td>
+<td>140.250000</td>
+<td>80.000000</td>
+<td>32.000000</td>
+<td>127.250000</td>
+<td>36.600000</td>
+<td>0.626250</td>
+<td>41.000000</td>
+<td>1.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>17.000000</td>
+<td>199.000000</td>
+<td>122.000000</td>
+<td>99.000000</td>
+<td>846.000000</td>
+<td>67.100000</td>
+<td>2.420000</td>
+<td>81.000000</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for missing values</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df.isnull().<span class="bu">any</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>Pregnancies                 False
+Glucose                     False
+BloodPressure               False
+SkinThickness               False
+Insulin                     False
+BMI                         False
+DiabetesPedigreeFunction    False
+Age                         False
+Outcome                     False
+dtype: bool</code></pre>
+</div>
+</div>
+<p><strong>Feature Correlation</strong></p>
+<p>Understanding the correlation between features is essential in selecting appropriate variables for the models. We visualize this correlation using a heatmap:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="op">=</span> df.corr()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span> ))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(correlation_matrix, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'inferno'</span>, fmt<span class="op">=</span><span class="st">".2f"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Correlation Heatmap'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="760" height="665"></p>
+</div>
+</div>
+<p>The 3D scatter plot with decision surfaces shown below visualizes the diabetes dataset. Each dot represents an individual, colored based on the likelihood of diabetes (Outcome). The three axes—Glucose, BMI, and Age—provide a multidimensional view, and hovering over the plot reveals the decision surfaces, offering insights into the complex relationships among these features.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3D Scatter plot with decision surfaces</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.scatter_3d(df, x<span class="op">=</span><span class="st">'Glucose'</span>, y<span class="op">=</span><span class="st">'BMI'</span>, z<span class="op">=</span><span class="st">'Age'</span>, color<span class="op">=</span><span class="st">'Outcome'</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                    opacity<span class="op">=</span><span class="fl">0.7</span>, size_max<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>fig.update_traces(marker<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">4</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                  selector<span class="op">=</span><span class="bu">dict</span>(mode<span class="op">=</span><span class="st">'markers'</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>fig.update_layout(scene<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                    xaxis<span class="op">=</span><span class="bu">dict</span>(title<span class="op">=</span><span class="st">'Glucose'</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                    yaxis<span class="op">=</span><span class="bu">dict</span>(title<span class="op">=</span><span class="st">'BMI'</span>),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                    zaxis<span class="op">=</span><span class="bu">dict</span>(title<span class="op">=</span><span class="st">'Age'</span>),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                    ))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>fig.update_layout(title_text<span class="op">=</span><span class="st">'3D Scatter Plot with Decision Surfaces'</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="65dfa013-c864-493e-bd9e-14944c08c9e6" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("65dfa013-c864-493e-bd9e-14944c08c9e6")) {                    Plotly.newPlot(                        "65dfa013-c864-493e-bd9e-14944c08c9e6",                        [{"hovertemplate":"Glucose=%{x}\u003cbr\u003eBMI=%{y}\u003cbr\u003eAge=%{z}\u003cbr\u003eOutcome=%{marker.color}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":[1,0,1,0,1,0,1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,1,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,0,1,0,0,0,1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,0,0,1,1,1,1,1,0,0,1,1,0,1,0,1,1,1,0,0,0,0,0,0,1,1,0,1,0,0,0,1,1,1,1,0,1,1,1,1,0,0,0,0,0,1,0,0,1,1,0,0,0,1,1,1,1,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,1,0,0,1,0,1,0,0,1,1,0,0,0,0,0,1,0,0,0,1,0,0,1,1,0,0,1,0,0,0,1,1,1,0,0,1,0,1,0,1,1,0,1,0,0,1,0,1,1,0,0,1,0,1,0,0,1,0,1,0,1,1,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,1,1,0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,0,0,0,0,1,1,0,1,0,1,0,0,0,0,1,1,0,1,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,1,1,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,1,0,0,0,1,0,1,0,1,0,1,0,1,0,0,1,0,0,1,0,0,0,0,1,1,0,1,0,0,0,0,1,1,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,0,1,1,0,0,0,0,0,0,0,1,1,0,1,0,0,1,0,1,0,0,0,0,0,1,0,1,0,1,0,1,1,0,0,0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,1,1,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,1,0,0,1,0,1,1,1,0,0,1,1,1,0,1,0,1,0,1,0,0,0,0,1,0],"coloraxis":"coloraxis","opacity":0.7,"symbol":"circle","size":4},"mode":"markers","name":"","scene":"scene","showlegend":false,"x":[148,85,183,89,137,116,78,115,197,125,110,168,139,189,166,100,118,107,103,115,126,99,196,119,143,125,147,97,145,117,109,158,88,92,122,103,138,102,90,111,180,133,106,171,159,180,146,71,103,105,103,101,88,176,150,73,187,100,146,105,84,133,44,141,114,99,109,109,95,146,100,139,126,129,79,0,62,95,131,112,113,74,83,101,137,110,106,100,136,107,80,123,81,134,142,144,92,71,93,122,163,151,125,81,85,126,96,144,83,95,171,155,89,76,160,146,124,78,97,99,162,111,107,132,113,88,120,118,117,105,173,122,170,84,96,125,100,93,129,105,128,106,108,108,154,102,57,106,147,90,136,114,156,153,188,152,99,109,88,163,151,102,114,100,131,104,148,120,110,111,102,134,87,79,75,179,85,129,143,130,87,119,0,73,141,194,181,128,109,139,111,123,159,135,85,158,105,107,109,148,113,138,108,99,103,111,196,162,96,184,81,147,179,140,112,151,109,125,85,112,177,158,119,142,100,87,101,162,197,117,142,134,79,122,74,171,181,179,164,104,91,91,139,119,146,184,122,165,124,111,106,129,90,86,92,113,111,114,193,155,191,141,95,142,123,96,138,128,102,146,101,108,122,71,106,100,106,104,114,108,146,129,133,161,108,136,155,119,96,108,78,107,128,128,161,151,146,126,100,112,167,144,77,115,150,120,161,137,128,124,80,106,155,113,109,112,99,182,115,194,129,112,124,152,112,157,122,179,102,105,118,87,180,106,95,165,117,115,152,178,130,95,0,122,95,126,139,116,99,0,92,137,61,90,90,165,125,129,88,196,189,158,103,146,147,99,124,101,81,133,173,118,84,105,122,140,98,87,156,93,107,105,109,90,125,119,116,105,144,100,100,166,131,116,158,127,96,131,82,193,95,137,136,72,168,123,115,101,197,172,102,112,143,143,138,173,97,144,83,129,119,94,102,115,151,184,94,181,135,95,99,89,80,139,90,141,140,147,97,107,189,83,117,108,117,180,100,95,104,120,82,134,91,119,100,175,135,86,148,134,120,71,74,88,115,124,74,97,120,154,144,137,119,136,114,137,105,114,126,132,158,123,85,84,145,135,139,173,99,194,83,89,99,125,80,166,110,81,195,154,117,84,0,94,96,75,180,130,84,120,84,139,91,91,99,163,145,125,76,129,68,124,114,130,125,87,97,116,117,111,122,107,86,91,77,132,105,57,127,129,100,128,90,84,88,186,187,131,164,189,116,84,114,88,84,124,97,110,103,85,125,198,87,99,91,95,99,92,154,121,78,130,111,98,143,119,108,118,133,197,151,109,121,100,124,93,143,103,176,73,111,112,132,82,123,188,67,89,173,109,108,96,124,150,183,124,181,92,152,111,106,174,168,105,138,106,117,68,112,119,112,92,183,94,108,90,125,132,128,94,114,102,111,128,92,104,104,94,97,100,102,128,147,90,103,157,167,179,136,107,91,117,123,120,106,155,101,120,127,80,162,199,167,145,115,112,145,111,98,154,165,99,68,123,91,195,156,93,121,101,56,162,95,125,136,129,130,107,140,144,107,158,121,129,90,142,169,99,127,118,122,125,168,129,110,80,115,127,164,93,158,126,129,134,102,187,173,94,108,97,83,114,149,117,111,112,116,141,175,92,130,120,174,106,105,95,126,65,99,102,120,102,109,140,153,100,147,81,187,162,136,121,108,181,154,128,137,123,106,190,88,170,89,101,122,121,126,93],"y":[33.6,26.6,23.3,28.1,43.1,25.6,31.0,35.3,30.5,0.0,37.6,38.0,27.1,30.1,25.8,30.0,45.8,29.6,43.3,34.6,39.3,35.4,39.8,29.0,36.6,31.1,39.4,23.2,22.2,34.1,36.0,31.6,24.8,19.9,27.6,24.0,33.2,32.9,38.2,37.1,34.0,40.2,22.7,45.4,27.4,42.0,29.7,28.0,39.1,0.0,19.4,24.2,24.4,33.7,34.7,23.0,37.7,46.8,40.5,41.5,0.0,32.9,25.0,25.4,32.8,29.0,32.5,42.7,19.6,28.9,32.9,28.6,43.4,35.1,32.0,24.7,32.6,37.7,43.2,25.0,22.4,0.0,29.3,24.6,48.8,32.4,36.6,38.5,37.1,26.5,19.1,32.0,46.7,23.8,24.7,33.9,31.6,20.4,28.7,49.7,39.0,26.1,22.5,26.6,39.6,28.7,22.4,29.5,34.3,37.4,33.3,34.0,31.2,34.0,30.5,31.2,34.0,33.7,28.2,23.2,53.2,34.2,33.6,26.8,33.3,55.0,42.9,33.3,34.5,27.9,29.7,33.3,34.5,38.3,21.1,33.8,30.8,28.7,31.2,36.9,21.1,39.5,32.5,32.4,32.8,0.0,32.8,30.5,33.7,27.3,37.4,21.9,34.3,40.6,47.9,50.0,24.6,25.2,29.0,40.9,29.7,37.2,44.2,29.7,31.6,29.9,32.5,29.6,31.9,28.4,30.8,35.4,28.9,43.5,29.7,32.7,31.2,67.1,45.0,39.1,23.2,34.9,27.7,26.8,27.6,35.9,30.1,32.0,27.9,31.6,22.6,33.1,30.4,52.3,24.4,39.4,24.3,22.9,34.8,30.9,31.0,40.1,27.3,20.4,37.7,23.9,37.5,37.7,33.2,35.5,27.7,42.8,34.2,42.6,34.2,41.8,35.8,30.0,29.0,37.8,34.6,31.6,25.2,28.8,23.6,34.6,35.7,37.2,36.7,45.2,44.0,46.2,25.4,35.0,29.7,43.6,35.9,44.1,30.8,18.4,29.2,33.1,25.6,27.1,38.2,30.0,31.2,52.3,35.4,30.1,31.2,28.0,24.4,35.8,27.6,33.6,30.1,28.7,25.9,33.3,30.9,30.0,32.1,32.4,32.0,33.6,36.3,40.0,25.1,27.5,45.6,25.2,23.0,33.2,34.2,40.5,26.5,27.8,24.9,25.3,37.9,35.9,32.4,30.4,27.0,26.0,38.7,45.6,20.8,36.1,36.9,36.6,43.3,40.5,21.9,35.5,28.0,30.7,36.6,23.6,32.3,31.6,35.8,52.9,21.0,39.7,25.5,24.8,30.5,32.9,26.2,39.4,26.6,29.5,35.9,34.1,19.3,30.5,38.1,23.5,27.5,31.6,27.4,26.8,35.7,25.6,35.1,35.1,45.5,30.8,23.1,32.7,43.3,23.6,23.9,47.9,33.8,31.2,34.2,39.9,25.9,25.9,32.0,34.7,36.8,38.5,28.7,23.5,21.8,41.0,42.2,31.2,34.4,27.2,42.7,30.4,33.3,39.9,35.3,36.5,31.2,29.8,39.2,38.5,34.9,34.0,27.6,21.0,27.5,32.8,38.4,0.0,35.8,34.9,36.2,39.2,25.2,37.2,48.3,43.4,30.8,20.0,25.4,25.1,24.3,22.3,32.3,43.3,32.0,31.6,32.0,45.7,23.7,22.1,32.9,27.7,24.7,34.3,21.1,34.9,32.0,24.2,35.0,31.6,32.9,42.1,28.9,21.9,25.9,42.4,35.7,34.4,42.4,26.2,34.6,35.7,27.2,38.5,18.2,26.4,45.3,26.0,40.6,30.8,42.9,37.0,0.0,34.1,40.6,35.0,22.2,30.4,30.0,25.6,24.5,42.4,37.4,29.9,18.2,36.8,34.3,32.2,33.2,30.5,29.7,59.4,25.3,36.5,33.6,30.5,21.2,28.9,39.9,19.6,37.8,33.6,26.7,30.2,37.6,25.9,20.8,21.8,35.3,27.6,24.0,21.8,27.8,36.8,30.0,46.1,41.3,33.2,38.8,29.9,28.9,27.3,33.7,23.8,25.9,28.0,35.5,35.2,27.8,38.2,44.2,42.3,40.7,46.5,25.6,26.1,36.8,33.5,32.8,28.9,0.0,26.6,26.0,30.1,25.1,29.3,25.2,37.2,39.0,33.3,37.3,33.3,36.5,28.6,30.4,25.0,29.7,22.1,24.2,27.3,25.6,31.6,30.3,37.6,32.8,19.6,25.0,33.2,0.0,34.2,31.6,21.8,18.2,26.3,30.8,24.6,29.8,45.3,41.3,29.8,33.3,32.9,29.6,21.7,36.3,36.4,39.4,32.4,34.9,39.5,32.0,34.5,43.6,33.1,32.8,28.5,27.4,31.9,27.8,29.9,36.9,25.5,38.1,27.8,46.2,30.1,33.8,41.3,37.6,26.9,32.4,26.1,38.6,32.0,31.3,34.3,32.5,22.6,29.5,34.7,30.1,35.5,24.0,42.9,27.0,34.7,42.1,25.0,26.5,38.7,28.7,22.5,34.9,24.3,33.3,21.1,46.8,39.4,34.4,28.5,33.6,32.0,45.3,27.8,36.8,23.1,27.1,23.7,27.8,35.2,28.4,35.8,40.0,19.5,41.5,24.0,30.9,32.9,38.2,32.5,36.1,25.8,28.7,20.1,28.2,32.4,38.4,24.2,40.8,43.5,30.8,37.7,24.7,32.4,34.6,24.7,27.4,34.5,26.2,27.5,25.9,31.2,28.8,31.6,40.9,19.5,29.3,34.3,29.5,28.0,27.6,39.4,23.4,37.8,28.3,26.4,25.2,33.8,34.1,26.8,34.2,38.7,21.8,38.9,39.0,34.2,27.7,42.9,37.6,37.9,33.7,34.8,32.5,27.5,34.0,30.9,33.6,25.4,35.5,57.3,35.6,30.9,24.8,35.3,36.0,24.2,24.2,49.6,44.6,32.3,0.0,33.2,23.1,28.3,24.1,46.1,24.6,42.3,39.1,38.5,23.5,30.4,29.9,25.0,34.5,44.5,35.9,27.6,35.0,38.5,28.4,39.8,0.0,34.4,32.8,38.0,31.2,29.6,41.2,26.4,29.5,33.9,33.8,23.1,35.5,35.6,29.3,38.1,29.3,39.1,32.8,39.4,36.1,32.4,22.9,30.1,28.4,28.4,44.5,29.0,23.3,35.4,27.4,32.0,36.6,39.5,42.3,30.8,28.5,32.7,40.6,30.0,49.3,46.3,36.4,24.3,31.2,39.0,26.0,43.3,32.4,36.5,32.0,36.3,37.5,35.5,28.4,44.0,22.5,32.9,36.8,26.2,30.1,30.4],"z":[50,31,32,21,33,30,26,29,53,54,30,34,57,59,51,32,31,31,33,32,27,50,41,29,51,41,43,22,57,38,60,28,22,28,45,33,35,46,27,56,26,37,48,54,40,25,29,22,31,24,22,26,30,58,42,21,41,31,44,22,21,39,36,24,42,32,38,54,25,27,28,26,42,23,22,22,41,27,26,24,22,22,36,22,37,27,45,26,43,24,21,34,42,60,21,40,24,22,23,31,33,22,21,24,27,21,27,37,25,24,24,46,23,25,39,61,38,25,22,21,25,24,23,69,23,26,30,23,40,62,33,33,30,39,26,31,21,22,29,28,55,38,22,42,23,21,41,34,65,22,24,37,42,23,43,36,21,23,22,47,36,45,27,21,32,41,22,34,29,29,36,29,25,23,33,36,42,26,47,37,32,23,21,27,40,41,60,33,31,25,21,40,36,40,42,29,21,23,26,29,21,28,32,27,55,27,57,52,21,41,25,24,60,24,36,38,25,32,32,41,21,66,37,61,26,22,26,24,31,24,22,46,22,29,23,26,51,23,32,27,21,22,22,33,29,49,41,23,34,23,42,27,24,25,44,21,30,25,24,51,34,27,24,63,35,43,25,24,21,28,38,21,40,21,52,25,29,23,57,22,28,39,37,47,52,51,34,29,26,33,21,25,31,24,65,28,29,24,46,58,30,25,35,28,37,29,47,21,25,30,41,22,27,25,43,26,30,29,28,59,31,25,36,43,21,24,30,37,23,37,46,25,41,44,22,26,44,44,33,41,22,36,22,33,57,49,22,23,26,37,29,30,46,24,21,49,28,44,48,29,29,63,65,67,30,30,29,21,22,45,25,21,21,25,28,58,22,22,32,35,24,22,21,25,25,24,35,45,58,28,42,27,21,37,31,25,39,22,25,25,31,55,35,38,41,26,46,25,39,28,28,25,22,21,21,22,22,37,27,28,26,21,21,21,36,31,25,38,26,43,23,38,22,29,36,29,41,28,21,31,41,22,24,33,30,25,28,26,22,26,23,23,25,72,24,38,62,24,51,81,48,26,39,37,34,21,22,25,38,27,28,22,22,50,24,59,29,31,39,63,35,29,28,23,31,24,21,58,28,67,24,42,33,45,22,66,30,25,55,39,21,28,41,41,40,38,35,21,21,64,46,21,58,22,24,28,53,51,41,60,25,26,26,45,24,21,21,24,22,31,22,24,29,31,24,23,46,67,23,32,43,27,56,25,29,37,53,28,50,37,21,25,66,23,28,37,30,58,42,35,54,28,24,32,27,22,21,46,37,33,39,21,22,22,23,25,35,21,36,62,21,27,62,42,52,22,41,29,52,25,45,24,44,25,34,22,46,21,38,26,24,28,30,54,36,21,22,25,27,23,24,36,40,26,50,27,30,23,50,24,28,28,45,21,21,29,21,21,45,21,34,24,23,22,31,38,48,23,32,28,27,24,50,31,27,30,33,22,42,23,23,27,28,27,22,25,22,41,51,27,54,22,43,40,40,24,70,40,43,45,49,21,47,22,68,31,53,25,25,23,22,26,22,27,69,25,22,29,23,46,34,44,23,43,25,43,31,22,28,26,26,49,52,41,27,28,30,22,45,23,24,40,38,21,32,34,31,56,24,52,34,21,42,42,45,38,25,22,22,22,34,22,24,22,53,28,21,42,21,42,48,26,22,45,39,46,27,32,36,50,22,28,25,26,45,37,39,52,26,66,22,43,33,63,27,30,47,23],"type":"scatter3d"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"scene":{"domain":{"x":[0.0,1.0],"y":[0.0,1.0]},"xaxis":{"title":{"text":"Glucose"}},"yaxis":{"title":{"text":"BMI"}},"zaxis":{"title":{"text":"Age"}}},"coloraxis":{"colorbar":{"title":{"text":"Outcome"}},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"legend":{"tracegroupgap":0},"margin":{"t":60},"title":{"text":"3D Scatter Plot with Decision Surfaces"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('65dfa013-c864-493e-bd9e-14944c08c9e6');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+<p><strong>Data Splitting</strong></p>
+<p>To train and evaluate our models, we split the dataset into training and testing sets:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'Outcome'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Outcome'</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The shape of X_train is:"</span>, X_train.shape)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The shape of X_test is:"</span>, X_test.shape)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The shape of y_train is:"</span>, y_train.shape)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The shape of y_test is:"</span>, y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The shape of X_train is: (537, 8)
+The shape of X_test is: (231, 8)
+The shape of y_train is: (537,)
+The shape of y_test is: (231,)</code></pre>
+</div>
+</div>
+<p><strong>K-Nearest Neighbors (KNN)</strong></p>
+<p>KNN is a simple yet effective algorithm that classifies a data point based on the majority class of its k-nearest neighbors. The choice of ‘k’ determines the number of neighbors considered when making a prediction. This model is particularly intuitive, as it operates on the principle that similar instances in a feature space tend to belong to the same class.</p>
+<p>Now, let’s explore the first model - KNN:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, confusion_matrix, ConfusionMatrixDisplay</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">5</span>, metric<span class="op">=</span><span class="st">'minkowski'</span>, p<span class="op">=</span><span class="dv">2</span>)  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>knn.fit(X_train, y_train)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction and evaluation</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>y_pred_knn <span class="op">=</span> knn.predict(X_test)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>confusion_matrix_knn <span class="op">=</span> confusion_matrix(y_test, y_pred_knn)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Confusion Matrix - KNN"</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Confusion Matrix</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>sns.heatmap(confusion_matrix_knn, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'d'</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, cbar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>            xticklabels<span class="op">=</span>[<span class="st">'Class 0'</span>, <span class="st">'Class 1'</span>],</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>            yticklabels<span class="op">=</span>[<span class="st">'Class 0'</span>, <span class="st">'Class 1'</span>])</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Confusion Matrix - KNN'</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Predicted'</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True'</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix - KNN</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-2.png" width="655" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classification report and performance metrics</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>classification_report_knn <span class="op">=</span> classification_report(y_test, y_pred_knn)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Classification Report - KNN"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report_knn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classification Report - KNN
+              precision    recall  f1-score   support
+
+           0       0.79      0.88      0.83       146
+           1       0.74      0.59      0.65        85
+
+    accuracy                           0.77       231
+   macro avg       0.76      0.73      0.74       231
+weighted avg       0.77      0.77      0.76       231
+</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tn, fp, fn, tp <span class="op">=</span> confusion_matrix(y_test, y_pred_knn).ravel()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>accuracy  <span class="op">=</span>(tp<span class="op">+</span>tn)<span class="op">/</span>(tp<span class="op">+</span>tn<span class="op">+</span>fp<span class="op">+</span>fn)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>precision <span class="op">=</span>(tp)<span class="op">/</span>(tp<span class="op">+</span>fp)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>recall  <span class="op">=</span>(tp)<span class="op">/</span>(tp<span class="op">+</span>fn)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>f1 <span class="op">=</span><span class="dv">2</span><span class="op">*</span>(( precision<span class="op">*</span> recall)<span class="op">/</span>( precision <span class="op">+</span> recall))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Accuracy:</span><span class="ch">\t</span><span class="st">'</span>,accuracy<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">Precision:</span><span class="ch">\t</span><span class="st">'</span>,precision<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">Recall: </span><span class="ch">\t</span><span class="st">'</span>,recall<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">F1-Score:</span><span class="ch">\t</span><span class="st">'</span>,f1<span class="op">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy:    77.05627705627705 
+Precision:   73.52941176470588 
+Recall:      58.82352941176471 
+F1-Score:    65.359477124183</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Curve and Precision-Recall Curve</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve, auc, precision_recall_curve</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>fpr, tpr, _ <span class="op">=</span> roc_curve(y_test, y_pred_knn)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>roc_auc <span class="op">=</span> auc(fpr, tpr)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr, color<span class="op">=</span><span class="st">'darkorange'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="ss">f'ROC curve (area = </span><span class="sc">{</span>roc_auc<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'navy'</span>, lw<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate'</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate'</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Receiver Operating Characteristic (ROC) Curve - KNN'</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-1.png" width="663" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>precision, recall, _ <span class="op">=</span> precision_recall_curve(y_test, y_pred_knn)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>plt.step(recall, precision, color<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, where<span class="op">=</span><span class="st">'post'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.fill_between(recall, precision, step<span class="op">=</span><span class="st">'post'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">'b'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Recall'</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Precision'</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="fl">0.0</span>, <span class="fl">1.05</span>])</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="fl">0.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Precision-Recall Curve - KNN'</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-13-output-1.png" width="674" height="523"></p>
+</div>
+</div>
+<p><strong>Support Vector Classifier (SVC)</strong></p>
+<p>SVC is a powerful model for both classification and regression tasks. It works by finding a hyperplane that best separates the data points into different classes. The flexibility of SVC lies in its ability to handle complex decision boundaries, making it suitable for scenarios where data is not linearly separable.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> metrics</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing and fitting the SVC model</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> SVC(C<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>m.fit(X_train, y_train)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>y_pred_svc <span class="op">=</span> m.predict(X_test)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>confusion_matrix_svc <span class="op">=</span> confusion_matrix(y_test, y_pred_svc)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Confusion Matrix</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>sns.heatmap(confusion_matrix_svc, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'d'</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, cbar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>            xticklabels<span class="op">=</span>[<span class="st">'Class 0'</span>, <span class="st">'Class 1'</span>],</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>            yticklabels<span class="op">=</span>[<span class="st">'Class 0'</span>, <span class="st">'Class 1'</span>])</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Confusion Matrix - SVC'</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Predicted'</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True'</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-14-output-1.png" width="655" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>classification_report_svc <span class="op">=</span> classification_report(y_test, y_pred_svc)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Classification Report - SVC"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report_svc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classification Report - SVC
+              precision    recall  f1-score   support
+
+           0       0.75      0.95      0.84       146
+           1       0.83      0.47      0.60        85
+
+    accuracy                           0.77       231
+   macro avg       0.79      0.71      0.72       231
+weighted avg       0.78      0.77      0.75       231
+</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tn, fp, fn, tp <span class="op">=</span> confusion_matrix(y_test, y_pred_svc).ravel()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>accuracysvc  <span class="op">=</span>(tp<span class="op">+</span>tn)<span class="op">/</span>(tp<span class="op">+</span>tn<span class="op">+</span>fp<span class="op">+</span>fn)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>precisionsvc <span class="op">=</span>(tp)<span class="op">/</span>(tp<span class="op">+</span>fp)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>recallsvc <span class="op">=</span>(tp)<span class="op">/</span>(tp<span class="op">+</span>fn)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>f1svc <span class="op">=</span><span class="dv">2</span><span class="op">*</span>(( precisionsvc<span class="op">*</span> recallsvc)<span class="op">/</span>( precisionsvc <span class="op">+</span> recallsvc))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Accuracy:</span><span class="ch">\t</span><span class="st">'</span>,accuracysvc<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">Precision:</span><span class="ch">\t</span><span class="st">'</span>,precisionsvc<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">Recall: </span><span class="ch">\t</span><span class="st">'</span>,recallsvc<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">F1-Score:</span><span class="ch">\t</span><span class="st">'</span>,f1svc<span class="op">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy:    77.05627705627705 
+Precision:   83.33333333333334 
+Recall:      47.05882352941176 
+F1-Score:    60.150375939849624</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Curve and Precision-Recall Curve</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, _ <span class="op">=</span> roc_curve(y_test, y_pred_svc)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>roc_auc <span class="op">=</span> auc(fpr, tpr)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr, color<span class="op">=</span><span class="st">'darkorange'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="ss">f'ROC curve (area = </span><span class="sc">{</span>roc_auc<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'navy'</span>, lw<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate'</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate'</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Receiver Operating Characteristic (ROC) Curve - SVC'</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-17-output-1.png" width="663" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>precision, recall, _ <span class="op">=</span> precision_recall_curve(y_test, y_pred_svc)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>plt.step(recall, precision, color<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, where<span class="op">=</span><span class="st">'post'</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>plt.fill_between(recall, precision, step<span class="op">=</span><span class="st">'post'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">'b'</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Recall'</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Precision'</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="fl">0.0</span>, <span class="fl">1.05</span>])</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="fl">0.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Precision-Recall Curve - SVC'</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-18-output-1.png" width="674" height="523"></p>
+</div>
+</div>
+<p><strong>Decision Tree Classifier</strong></p>
+<p>Finally, exploring the Decision Tree model: Decision trees are tree-like models where each internal node represents a decision based on the value of a particular feature. These decisions lead to different branches, eventually reaching leaf nodes that represent the class labels. Decision trees are easy to interpret and visualize, making them a popular choice for various applications.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing and fitting the Decision Tree model</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>dclf <span class="op">=</span> DecisionTreeClassifier()</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>dclf.fit(X_train, y_train)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction and evaluation</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>y_pred_dt <span class="op">=</span> dclf.predict(X_test)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix </span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>confusion_matrix_dt <span class="op">=</span> confusion_matrix(y_test, y_pred_dt)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Confusion Matrix - DT"</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Confusion Matrix</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>sns.heatmap(confusion_matrix_dt, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'d'</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, cbar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>            xticklabels<span class="op">=</span>[<span class="st">'Class 0'</span>, <span class="st">'Class 1'</span>],</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>            yticklabels<span class="op">=</span>[<span class="st">'Class 0'</span>, <span class="st">'Class 1'</span>])</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Confusion Matrix - DT'</span>)</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Predicted'</span>)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True'</span>)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix - DT</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-19-output-2.png" width="655" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classification report and performance metrics</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>classification_report_dt <span class="op">=</span> classification_report(y_test, y_pred_dt)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Classification Report - DT"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report_dt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classification Report - DT
+              precision    recall  f1-score   support
+
+           0       0.73      0.79      0.76       146
+           1       0.59      0.51      0.54        85
+
+    accuracy                           0.69       231
+   macro avg       0.66      0.65      0.65       231
+weighted avg       0.68      0.69      0.68       231
+</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tn, fp, fn, tp <span class="op">=</span> confusion_matrix(y_test, y_pred_dt).ravel()</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>accuracydt  <span class="op">=</span>(tp<span class="op">+</span>tn)<span class="op">/</span>(tp<span class="op">+</span>tn<span class="op">+</span>fp<span class="op">+</span>fn)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>precisiondt <span class="op">=</span>(tp)<span class="op">/</span>(tp<span class="op">+</span>fp)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>recalldt <span class="op">=</span>(tp)<span class="op">/</span>(tp<span class="op">+</span>fn)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>f1dt <span class="op">=</span><span class="dv">2</span><span class="op">*</span>(( precisiondt<span class="op">*</span> recalldt)<span class="op">/</span>( precisiondt <span class="op">+</span> recalldt))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Accuracy:</span><span class="ch">\t</span><span class="st">'</span>,accuracydt<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">Precision:</span><span class="ch">\t</span><span class="st">'</span>,precisiondt<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">Recall: </span><span class="ch">\t</span><span class="st">'</span>,recalldt<span class="op">*</span><span class="dv">100</span>,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'</span><span class="ch">\n</span><span class="st">F1-Score:</span><span class="ch">\t</span><span class="st">'</span>,f1dt<span class="op">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy:    68.83116883116884 
+Precision:   58.9041095890411 
+Recall:      50.588235294117645 
+F1-Score:    54.430379746835435</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC Curve and Precision-Recall Curve</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>fpr, tpr, _ <span class="op">=</span> roc_curve(y_test, y_pred_dt)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>roc_auc <span class="op">=</span> auc(fpr, tpr)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr, tpr, color<span class="op">=</span><span class="st">'darkorange'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="ss">f'ROC curve (area = </span><span class="sc">{</span>roc_auc<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'navy'</span>, lw<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate'</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate'</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Receiver Operating Characteristic (ROC) Curve - DT'</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-22-output-1.png" width="663" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>precision, recall, _ <span class="op">=</span> precision_recall_curve(y_test, y_pred_dt)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.step(recall, precision, color<span class="op">=</span><span class="st">'b'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, where<span class="op">=</span><span class="st">'post'</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.fill_between(recall, precision, step<span class="op">=</span><span class="st">'post'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">'b'</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Recall'</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Precision'</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="fl">0.0</span>, <span class="fl">1.05</span>])</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="fl">0.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Precision-Recall Curve - DT'</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-23-output-1.png" width="674" height="523"></p>
+</div>
+</div>
+<p><strong>Model Comparison Analysis</strong> Let’s analyze and compare the performance metrics of each model to gain insights into their effectiveness in predicting diabetes.</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># KNN</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>fpr_knn, tpr_knn, _ <span class="op">=</span> roc_curve(y_test, y_pred_knn)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>roc_auc_knn <span class="op">=</span> auc(fpr_knn, tpr_knn)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr_knn, tpr_knn, label<span class="op">=</span><span class="ss">f'KNN (AUC = </span><span class="sc">{</span>roc_auc_knn<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># SVC</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>fpr_svc, tpr_svc, _ <span class="op">=</span> roc_curve(y_test, y_pred_svc)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>roc_auc_svc <span class="op">=</span> auc(fpr_svc, tpr_svc)</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr_svc, tpr_svc, label<span class="op">=</span><span class="ss">f'SVC (AUC = </span><span class="sc">{</span>roc_auc_svc<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision Tree</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>fpr_dtc, tpr_dtc, _ <span class="op">=</span> roc_curve(y_test, y_pred_dt)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>roc_auc_dtc <span class="op">=</span> auc(fpr_dtc, tpr_dtc)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>plt.plot(fpr_dtc, tpr_dtc, label<span class="op">=</span><span class="ss">f'DT(AUC = </span><span class="sc">{</span>roc_auc_dtc<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'navy'</span>, lw<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Positive Rate'</span>)</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'True Positive Rate'</span>)</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'ROC Curve - Model Comparison'</span>)</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-24-output-1.png" width="663" height="523"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># KNN</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>precision_knn, recall_knn, _ <span class="op">=</span> precision_recall_curve(y_test, y_pred_knn)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>plt.plot(recall_knn, precision_knn, label<span class="op">=</span><span class="ss">f'KNN'</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># SVC</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>precision_svc, recall_svc, _ <span class="op">=</span> precision_recall_curve(y_test, y_pred_svc)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>plt.plot(recall_svc, precision_svc, label<span class="op">=</span><span class="ss">f'SVC'</span>)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision Tree</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>precision_dtc, recall_dtc, _ <span class="op">=</span> precision_recall_curve(y_test, y_pred_dt)</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>plt.plot(recall_dtc, precision_dtc, label<span class="op">=</span><span class="ss">f'Decision Tree'</span>)</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Recall'</span>)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Precision'</span>)</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="fl">0.0</span>, <span class="fl">1.05</span>])</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="fl">0.0</span>, <span class="fl">1.0</span>])</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Precision-Recall Curve - Model Comparison'</span>)</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-25-output-1.png" width="674" height="523"></p>
+</div>
+</div>
+<p><strong>Comparison Analysis</strong></p>
+<p><strong>Accuracy:</strong> KNN and SVC show similar accuracy, both around 77%, while Decision Tree lags slightly behind at 68%.</p>
+<p><strong>Precision:</strong> SVC has the highest precision at 83.33%, indicating a low rate of false positives. KNN follows with 73.53%, and Decision Tree has the lowest precision at 58.33%.</p>
+<p><strong>Recall:</strong> KNN has the highest recall at 58.82%, followed by Decision Tree (49.41%), and SVC with the lowest recall at 47.06%.</p>
+<p><strong>F1-Score:</strong> KNN achieves the highest F1-score at 65.36%, followed by SVC (60.15%), and Decision Tree with a slightly lower F1-score of 53.58%.</p>
+<p><strong>Conclusion</strong></p>
+<p>In conclusion, the choice of a diabetes prediction model depends on specific goals and priorities. For instance, if minimizing false positives is crucial, the higher precision of SVC might be favored. If balancing precision and recall is important, KNN could be a reasonable choice with its relatively balanced performance. KNN excels in simplicity and interpretability, SVC in handling complex decision boundaries, and Decision Trees in providing a clear decision-making structure. The detailed analysis and graphical representation empower decision-makers to choose the model that aligns with the unique requirements of the prediction task.</p>
+<div class="footer">
+<p><!-- <hr>
+
+<!-- <div class="comment-container">
+  <h3>Share Your Thoughts</h3>
+  <p>Provide your feedback and thoughts on this article. We appreciate your input!</p>
+
+  <div class="comment-form">
+    <textarea id="feedback" rows="4" style="width: 100%;" placeholder="Your feedback here..."></textarea>
+    <br>
+    <button class="signin-button" onclick="signInWithGitHub()">Sign In with GitHub</button>
+  </div> --> <!-- </div> --> –&gt;</p>
+<hr>
+<h3 class="anchored">
+Connect with me on GitHub
+</h3>
+<p>
+Find more projects and articles on my <a href="https://github.com/gayatribkar">GitHub</a>.
+</p>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

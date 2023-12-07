@@ -1,0 +1,216 @@
+---
+title: "Exploring Unsupervised Anomaly Detection in Thyroid Dataset (BLOG ON ANOMALY/OUTLIER DETECTION)"
+author: "Gayatri Milind Bhatambarekar"
+date: today
+categories: [Exploratory Data Analysis (EDA), Outlier detection, Isolation Forest, Z-score]
+image: "anomaly.png"
+editor_options: 
+  chunk_output_type: console
+---
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+
+</style>
+
+Anomaly detection is a crucial aspect of data analysis, helping us identify patterns that deviate significantly from the norm. In this blog post, our primary objective is to employ sophisticated anomaly detection techniques to identify and visualize outliers within the dataset. We will explore the world of unsupervised anomaly detection in the context of thyroid dataset.
+
+
+**Understanding the Dataset**
+
+Our blog begins with loading and understanding the dataset. After removing unnecessary columns, we delve into the visualization to gain insights into the distribution of data points. 
+
+
+```{python}
+# Importing necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+data = pd.read_csv('annthyroid_unsupervised_anomaly_detection.csv', delimiter=';')
+
+data.head()
+
+```
+
+```{python}
+# Checking the shape and data types of the dataset
+print(data.shape)
+
+```
+
+```{python}
+# Descriptive statistics of the dataset
+data.describe()
+```
+
+```{python}
+
+# Drop unnecessary columns
+data = data.drop(["Unnamed: 22", "Unnamed: 23"], axis=1)
+
+# Select numerical columns for outlier detection
+numerical_cols = ['TSH', 'T3_measured', 'TT4_measured', 'T4U_measured', 'FTI_measured']
+
+# Create a new DataFrame with only numerical columns
+data_numerical = data[numerical_cols]
+
+# Visualize the correlation matrix
+sns.heatmap(data[numerical_cols].corr(), annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Heatmap of Numerical Features')
+plt.show()
+
+```
+
+```{python}
+plt.figure(figsize=(15, 8))
+for i, col in enumerate(numerical_cols):
+    plt.subplot(2, 3, i+1)
+    plt.hist(data[col], bins=20, color='skyblue', edgecolor='black')
+    plt.title(f'Histogram of {col}')
+plt.tight_layout()
+plt.show()
+
+```
+**Traditional Outlier Detection: Boxplots and Violin Plots**
+
+Next, we employ traditional methods to identify outliers in the dataset. Boxplots provide a quick summary of the distribution of each feature, making it easy to spot potential outliers. Violin plots, on the other hand, combine the benefits of box plots and kernel density plots, offering a richer visualization of the data distribution.
+
+```{python}
+plt.figure(figsize=(9, 5))
+data.boxplot(column=numerical_cols)
+plt.title('Boxplot for Numerical Columns')
+plt.show()
+
+```
+
+
+```{python}
+plt.figure(figsize=(9, 5))
+sns.violinplot(data=data[numerical_cols], palette='husl')
+plt.title('Violin Plot of Numerical Features')
+plt.show()
+
+```
+
+**Isolation Forest: An Ensemble Method** 
+
+
+To enhance our anomaly detection capabilities, we introduce the Isolation Forest algorithm. By fitting the model to numerical columns, we identify outliers and visualize them using a scatter plot. The outliers are then removed.
+
+```{python}
+from sklearn.ensemble import IsolationForest
+
+# Select numerical columns for outlier detection
+numerical_cols = ['TSH', 'T3_measured', 'TT4_measured', 'T4U_measured', 'FTI_measured']
+
+# Create a new DataFrame with only numerical columns
+data_numerical = data[numerical_cols]
+
+# Fit Isolation Forest model
+clf = IsolationForest(contamination=0.1, random_state=42)
+data['IsolationForest_Outlier'] = clf.fit_predict(data_numerical)
+
+# Visualize outliers
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='TSH', y='T3_measured', hue='IsolationForest_Outlier', data=data, palette='viridis')
+plt.title('Outliers Visualization')
+
+plt.show()
+
+# Remove Isolation Forest outliers
+data_no_iso_outliers = data[data['IsolationForest_Outlier'] == 1]
+
+```
+Our RFM data now provides insights into how recently customers made a purchase, how frequently they buy, and how much money they spend.
+
+
+**Z-Score Method: A Statistical Approach**
+
+The Z-score method is applied to identify and visualize outliers, followed by the removal of outliers. We calculate Z-scores for numerical columns and set a threshold for outlier identification. Visualizing outliers using a scatter plot and removing them from the dataset, we once again showcase the impact of this technique through a pair plo
+
+```{python}
+from scipy.stats import zscore
+
+# Calculate Z-scores for numerical columns
+z_scores = zscore(data[numerical_cols])
+
+# Define a threshold for Z-score (e.g., 3 standard deviations)
+threshold = 3
+
+# Identify outliers based on Z-scores
+outliers_zscore = (abs(z_scores) > threshold).any(axis=1)
+# outliers = (abs(z_scores) > threshold).any(axis=1)
+data['ZScore_Outlier'] = outliers_zscore.astype(int)
+# Visualize outliers
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='TSH', y='T3_measured', hue="ZScore_Outlier", data=data, palette='viridis')
+plt.title('Outliers Visualization using Z-Score')
+plt.show()
+
+# Remove Z-Score outliers
+data_no_zscore_outliers = data[data['ZScore_Outlier'] == 1]
+
+```
+
+The below plot is a 3D scatter plot side by side. Each point represents a data instance, and the color indicates whether it is detected as an outlier by Isolation Forest or Z-Score. This visualization allows us to observe outliers in a three-dimensional space, providing insights into their distribution across multiple features.
+```{python}
+from mpl_toolkits.mplot3d import Axes3D
+
+# Create a 3D scatter plot for Isolation Forest outliers
+fig = plt.figure(figsize=(15, 5))
+ax1 = fig.add_subplot(121, projection='3d')
+ax1.scatter(data['TSH'], data['T3_measured'], data['TT4_measured'], c=data['IsolationForest_Outlier'], cmap='viridis')
+ax1.set_title('3D Scatter Plot with Isolation Forest Outliers')
+ax1.set_xlabel('TSH')
+ax1.set_ylabel('T3_measured')
+ax1.set_zlabel('TT4_measured')
+
+# Create a 3D scatter plot for Z-Score outliers
+ax2 = fig.add_subplot(122, projection='3d')
+ax2.scatter(data['TSH'], data['T3_measured'], data['TT4_measured'], c=data['ZScore_Outlier'], cmap='viridis')
+ax2.set_title('3D Scatter Plot with Z-Score Outliers')
+ax2.set_xlabel('TSH')
+ax2.set_ylabel('T3_measured')
+ax2.set_zlabel('TT4_measured')
+
+plt.tight_layout()
+plt.show()
+
+```
+
+**Conclusion**
+
+This exploration into unsupervised anomaly detection in thyroid datasets showcases a range of techniques, from traditional methods to advanced algorithms. Each method contributes to a deeper understanding of the dataset, aiding in the identification and handling of outliers.
+
+By integrating code with visualization, this approach empowers data analysts and scientists to make informed decisions in preprocessing and analysis. Choose the method that aligns with your dataset characteristics and analytical goals, ensuring a robust and reliable foundation for subsequent analyses.
+
+
+
+<div class="footer">
+  <!-- <hr>
+
+<!-- <div class="comment-container">
+  <h3>Share Your Thoughts</h3>
+  <p>Provide your feedback and thoughts on this article. We appreciate your input!</p>
+
+  <div class="comment-form">
+    <textarea id="feedback" rows="4" style="width: 100%;" placeholder="Your feedback here..."></textarea>
+    <br>
+    <button class="signin-button" onclick="signInWithGitHub()">Sign In with GitHub</button>
+  </div> -->
+<!-- </div> --> -->
+
+
+  <hr>
+
+  <h3>Connect with me on GitHub</h3>
+  <p>Find more projects and articles on my [GitHub](https://github.com/gayatribkar).</p>
+</div>
+

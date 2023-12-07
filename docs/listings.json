@@ -1,0 +1,12 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/1. Probability theory and random variables/index.html",
+      "/posts/2. Clustering/index.html",
+      "/posts/3. Regression/index.html",
+      "/posts/4. Classification/index.html",
+      "/posts/Anomaly detection/index.html"
+    ]
+  }
+]

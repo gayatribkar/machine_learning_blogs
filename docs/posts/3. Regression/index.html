@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Gayatri Milind Bhatambarekar">
+<meta name="dcterms.date" content="2023-12-07">
+
+<title>My Blogs - A Comprehensive Analysis of Linear and Non-Linear Regression in Advertising Data (BLOG ON LINEAR AND NON LINEAR REGRESSION)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Blogs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/gayatribkar" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gayatri-bhatambarekar/" rel="" target=""><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">A Comprehensive Analysis of Linear and Non-Linear Regression in Advertising Data (BLOG ON LINEAR AND NON LINEAR REGRESSION)</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Exploratory Data Analysis (EDA)</div>
+                <div class="quarto-category">Linear Regression</div>
+                <div class="quarto-category">Polynomial Regression</div>
+                <div class="quarto-category">Neural Network Regression</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Gayatri Milind Bhatambarekar </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 7, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+
+</style>
+<p>In the dynamic world of marketing and advertising, gaining insights into the influence of diverse channels on sales performance is crucial for strategic decision-making. The advertising dataset serves as a valuable repository, unveiling details about budget allocations across pivotal platforms like TV, radio, and newspapers, juxtaposed against their respective impacts on sales. This information empowers marketers to discern the most effective channels, optimize resource allocation, and refine strategies, ultimately enhancing the overall return on investment and fostering data-driven precision in the dynamic landscape of advertising and sales optimization.</p>
+<p><strong>Exploring the customer behavior dataset</strong></p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.read_csv(<span class="st">"Advertising.csv"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df1.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">TV</th>
+<th data-quarto-table-cell-role="th">Radio</th>
+<th data-quarto-table-cell-role="th">Newspaper</th>
+<th data-quarto-table-cell-role="th">Sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>230.1</td>
+<td>37.8</td>
+<td>69.2</td>
+<td>22.1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>44.5</td>
+<td>39.3</td>
+<td>45.1</td>
+<td>10.4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>17.2</td>
+<td>45.9</td>
+<td>69.3</td>
+<td>9.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>151.5</td>
+<td>41.3</td>
+<td>58.5</td>
+<td>18.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>180.8</td>
+<td>10.8</td>
+<td>58.4</td>
+<td>12.9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The dataset comprises information about the advertising budget for TV, radio, and newspaper, along with the corresponding sales figures. To start our analysis, we will first drop the unnecessary ‘Unnamed:0’ column.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df1.drop(df1.columns[<span class="dv">0</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">TV</th>
+<th data-quarto-table-cell-role="th">Radio</th>
+<th data-quarto-table-cell-role="th">Newspaper</th>
+<th data-quarto-table-cell-role="th">Sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>230.1</td>
+<td>37.8</td>
+<td>69.2</td>
+<td>22.1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>44.5</td>
+<td>39.3</td>
+<td>45.1</td>
+<td>10.4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>17.2</td>
+<td>45.9</td>
+<td>69.3</td>
+<td>9.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>151.5</td>
+<td>41.3</td>
+<td>58.5</td>
+<td>18.5</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>180.8</td>
+<td>10.8</td>
+<td>58.4</td>
+<td>12.9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking the shape and data types of the dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(200, 4)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Descriptive statistics of the dataset</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">TV</th>
+<th data-quarto-table-cell-role="th">Radio</th>
+<th data-quarto-table-cell-role="th">Newspaper</th>
+<th data-quarto-table-cell-role="th">Sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>200.000000</td>
+<td>200.000000</td>
+<td>200.000000</td>
+<td>200.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>147.042500</td>
+<td>23.264000</td>
+<td>30.554000</td>
+<td>14.022500</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>85.854236</td>
+<td>14.846809</td>
+<td>21.778621</td>
+<td>5.217457</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>0.700000</td>
+<td>0.000000</td>
+<td>0.300000</td>
+<td>1.600000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>74.375000</td>
+<td>9.975000</td>
+<td>12.750000</td>
+<td>10.375000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>149.750000</td>
+<td>22.900000</td>
+<td>25.750000</td>
+<td>12.900000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>218.825000</td>
+<td>36.525000</td>
+<td>45.100000</td>
+<td>17.400000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>296.400000</td>
+<td>49.600000</td>
+<td>114.000000</td>
+<td>27.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p><strong>Visualizing the Data Distribution</strong></p>
+<p>Understanding the distribution of each feature in the dataset is crucial for gaining insights. Let’s create histograms to visualize the distribution of TV, radio, and newspaper budgets.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, variable <span class="kw">in</span> <span class="bu">enumerate</span>(df1.iloc[:, <span class="dv">1</span>:]):</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    sns.histplot(df1[variable], kde<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="ss">f'Distribution of </span><span class="sc">{</span>variable<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="854" height="470"></p>
+</div>
+</div>
+<p>These histograms provide a quick overview of the distribution of advertising budgets across different channels. It’s interesting to note the varying ranges and patterns in the data.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot for TV vs Sales</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">'TV'</span>], df[<span class="st">'Sales'</span>], color<span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'TV Budget vs Sales'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'TV Budget'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot for Radio vs Sales</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">'Radio'</span>], df[<span class="st">'Sales'</span>], color<span class="op">=</span><span class="st">'green'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Radio Budget vs Sales'</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Radio Budget'</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot for Newspaper vs Sales</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">'Newspaper'</span>], df[<span class="st">'Sales'</span>], color<span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Newspaper Budget vs Sales'</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Newspaper Budget'</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="614" height="374"></p>
+</div>
+</div>
+<p>This set of three scatter plots visually illustrates the relationship between advertising budgets allocated to TV, radio, and newspaper channels and their respective impacts on sales. Each subplot reveals the distribution of sales across different budget ranges, providing a clear snapshot of the potential associations between advertising investments in each channel and resulting sales figures.</p>
+<p><strong>Exploring Correlations</strong></p>
+<p>To understand the relationships between variables, a correlation matrix is constructed and visualized using a heatmap.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="op">=</span> df.corr()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(correlation_matrix, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, fmt<span class="op">=</span><span class="st">".2f"</span>, linewidths<span class="op">=</span><span class="fl">.5</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Correlation Matrix'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="734" height="653"></p>
+</div>
+</div>
+<p>This heatmap helps us identify correlations between different advertising channels and sales. It becomes apparent that TV has a higher correlation with sales compared to radio and newspaper.</p>
+<p><strong>Linear Regression Analysis</strong></p>
+<p>Moving on to predictive analytics, we split the data into training and testing sets and perform linear regression analysis.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop([<span class="st">'Sales'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Sales'</span>]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear regression model</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LinearRegression()</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_test, y_pred)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error: </span><span class="sc">{</span>mse<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean Squared Error: 3.1740973539761033</code></pre>
+</div>
+</div>
+<p>The mean squared error gives us an indication of the model’s performance. Lower values signify a better fit.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">9</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ax.scatter(X_test[<span class="st">'Newspaper'</span>], X_test[<span class="st">'TV'</span>], y_test, c<span class="op">=</span><span class="st">'black'</span>, marker<span class="op">=</span><span class="st">'o'</span>, label<span class="op">=</span><span class="st">'Actual'</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ax.scatter(X_test[<span class="st">'Newspaper'</span>], X_test[<span class="st">'TV'</span>], y_pred, c<span class="op">=</span><span class="st">'blue'</span>, marker<span class="op">=</span><span class="st">'^'</span>, label<span class="op">=</span><span class="st">'Predicted'</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Newspaper Budget'</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Television Budget'</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">'Sales'</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Multivariate Linear Regression Predictions vs Actual'</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-10-output-1.png" width="694" height="704"></p>
+</div>
+</div>
+<p>The above 3D scatter plot contrasts actual sales with predictions from a Multivariate Linear Regression model, revealing the model’s efficacy in capturing the impact of Newspaper and Television advertising budgets on sales. The visual distinction between actual and predicted values offers a concise evaluation of the model’s accuracy in multivariate sales forecasting.</p>
+<p><strong>Polynomial Regression Analysis</strong></p>
+<p>Polynomial regression is a powerful analytical technique employed to model relationships between variables that may not be linear. Imagine data points forming curves or intricate patterns rather than following a straightforward path. Polynomial regression allows us to capture these non-linear relationships by introducing higher-degree terms in our model. To capture potential non-linear relationships in our data, we explore polynomial regression with different degrees.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>degrees <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">11</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>costs <span class="op">=</span> []</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> degree <span class="kw">in</span> degrees:</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    poly <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span>degree)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    X_train_poly <span class="op">=</span> poly.fit_transform(X_train)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    X_test_poly <span class="op">=</span> poly.transform(X_test)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> LinearRegression()</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    model.fit(X_train_poly, y_train)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> model.predict(X_test_poly)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    mse_poly <span class="op">=</span> mean_squared_error(y_test, y_pred)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    costs.append(mse_poly)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the cost for each degree</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>plt.xlim([<span class="dv">0</span>, <span class="dv">10</span>])</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="dv">0</span>, <span class="dv">10</span>])</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>plt.plot(degrees, costs, marker<span class="op">=</span><span class="st">'o'</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Polynomial Degree'</span>)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mean Squared Error (Cost)'</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Polynomial Regression Analysis'</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-1.png" width="593" height="449"></p>
+</div>
+</div>
+<p>The plot reveals that a polynomial degree of 3 yields the minimum mean squared error, indicating a good compromise between bias and variance.</p>
+<p><strong>Neural Network Regression</strong></p>
+<p>For a more complex model, we delve into neural network regression using TensorFlow. Neural network regression, involves constructing a multilayer perceptron capable of learning complex patterns for predicting continuous outputs. Utilizing ReLU activation functions for non-linearity, the model excels in capturing intricate relationships. Inspired by the human brain, neural networks undergo training to optimize weights, making them adept at nonlinear regression tasks.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.models.Sequential()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>model.add(tf.keras.layers.Dense(<span class="dv">10</span>, input_dim<span class="op">=</span>X_train.shape[<span class="dv">1</span>], activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>model.add(tf.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>model.add(tf.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>model.add(tf.keras.layers.Dense(<span class="dv">1</span>, activation<span class="op">=</span><span class="st">'linear'</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">'mean_squared_error'</span>, optimizer<span class="op">=</span><span class="st">'adam'</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> model.fit(X_train, y_train, epochs<span class="op">=</span><span class="dv">200</span>, batch_size<span class="op">=</span><span class="dv">16</span>, validation_data<span class="op">=</span>(X_test, y_test))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>plt.plot(history.history[<span class="st">'loss'</span>], label<span class="op">=</span><span class="st">'Training Loss'</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>plt.plot(history.history[<span class="st">'val_loss'</span>], label<span class="op">=</span><span class="st">'Validation Loss'</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Neural Network Loss vs Epochs'</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>neural_pred <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>mse_neural <span class="op">=</span> mean_squared_error(neural_pred, y_test)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error: </span><span class="sc">{</span>mse_neural<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/200
+ 1/10 [==&gt;...........................] - ETA: 7s - loss: 347.891210/10 [==============================] - 1s 18ms/step - loss: 294.9319 - val_loss: 244.3895
+Epoch 2/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 324.916810/10 [==============================] - 0s 4ms/step - loss: 232.8803 - val_loss: 197.6942
+Epoch 3/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 180.917010/10 [==============================] - 0s 4ms/step - loss: 183.4211 - val_loss: 159.6202
+Epoch 4/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 165.123810/10 [==============================] - 0s 4ms/step - loss: 143.9482 - val_loss: 124.9349
+Epoch 5/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 92.322910/10 [==============================] - 0s 4ms/step - loss: 105.9881 - val_loss: 95.5513
+Epoch 6/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 82.379210/10 [==============================] - 0s 4ms/step - loss: 74.0482 - val_loss: 72.0073
+Epoch 7/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 56.714310/10 [==============================] - 0s 4ms/step - loss: 49.9833 - val_loss: 55.6577
+Epoch 8/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 57.085710/10 [==============================] - 0s 4ms/step - loss: 35.1928 - val_loss: 46.6508
+Epoch 9/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 55.333410/10 [==============================] - 0s 4ms/step - loss: 27.1127 - val_loss: 43.1219
+Epoch 10/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 41.667210/10 [==============================] - 0s 4ms/step - loss: 24.8227 - val_loss: 41.6910
+Epoch 11/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 15.635810/10 [==============================] - 0s 4ms/step - loss: 24.0320 - val_loss: 39.6636
+Epoch 12/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 16.514310/10 [==============================] - 0s 4ms/step - loss: 23.3638 - val_loss: 37.3211
+Epoch 13/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 21.283010/10 [==============================] - 0s 4ms/step - loss: 22.5541 - val_loss: 35.6362
+Epoch 14/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 16.350510/10 [==============================] - 0s 4ms/step - loss: 21.8870 - val_loss: 34.0250
+Epoch 15/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 15.847710/10 [==============================] - 0s 4ms/step - loss: 21.3093 - val_loss: 32.9343
+Epoch 16/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.897010/10 [==============================] - 0s 4ms/step - loss: 20.7792 - val_loss: 32.0961
+Epoch 17/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 15.154710/10 [==============================] - 0s 4ms/step - loss: 20.2345 - val_loss: 31.1544
+Epoch 18/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 17.844910/10 [==============================] - 0s 4ms/step - loss: 19.7976 - val_loss: 30.5056
+Epoch 19/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 24.725210/10 [==============================] - 0s 4ms/step - loss: 19.2836 - val_loss: 29.7806
+Epoch 20/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 19.319910/10 [==============================] - 0s 5ms/step - loss: 18.8552 - val_loss: 29.2129
+Epoch 21/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.223810/10 [==============================] - 0s 6ms/step - loss: 18.4406 - val_loss: 28.5988
+Epoch 22/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.611910/10 [==============================] - 0s 5ms/step - loss: 18.1526 - val_loss: 27.7706
+Epoch 23/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 11.918710/10 [==============================] - 0s 6ms/step - loss: 17.7112 - val_loss: 27.3806
+Epoch 24/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 11.655810/10 [==============================] - 0s 5ms/step - loss: 17.4135 - val_loss: 26.5879
+Epoch 25/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 8.235710/10 [==============================] - 0s 5ms/step - loss: 17.0842 - val_loss: 26.1701
+Epoch 26/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 15.278810/10 [==============================] - 0s 5ms/step - loss: 16.7184 - val_loss: 25.3978
+Epoch 27/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.937810/10 [==============================] - 0s 5ms/step - loss: 16.4250 - val_loss: 24.8294
+Epoch 28/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 22.718210/10 [==============================] - 0s 5ms/step - loss: 16.0773 - val_loss: 24.2736
+Epoch 29/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 9.650210/10 [==============================] - 0s 5ms/step - loss: 15.7886 - val_loss: 23.8289
+Epoch 30/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.403210/10 [==============================] - 0s 5ms/step - loss: 15.5297 - val_loss: 23.6357
+Epoch 31/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.566910/10 [==============================] - 0s 5ms/step - loss: 15.3171 - val_loss: 22.9437
+Epoch 32/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.550810/10 [==============================] - 0s 4ms/step - loss: 15.0744 - val_loss: 22.5992
+Epoch 33/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 8.446310/10 [==============================] - 0s 5ms/step - loss: 14.7642 - val_loss: 22.1591
+Epoch 34/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 14.862610/10 [==============================] - 0s 4ms/step - loss: 14.4969 - val_loss: 21.8559
+Epoch 35/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.315510/10 [==============================] - 0s 4ms/step - loss: 14.2588 - val_loss: 21.4817
+Epoch 36/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 16.242610/10 [==============================] - 0s 4ms/step - loss: 14.0962 - val_loss: 21.1767
+Epoch 37/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 16.163710/10 [==============================] - 0s 5ms/step - loss: 13.8706 - val_loss: 21.0124
+Epoch 38/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 8.473710/10 [==============================] - 0s 5ms/step - loss: 13.5830 - val_loss: 20.5981
+Epoch 39/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 14.889310/10 [==============================] - 0s 5ms/step - loss: 13.3536 - val_loss: 20.2631
+Epoch 40/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.305310/10 [==============================] - 0s 5ms/step - loss: 13.1411 - val_loss: 20.0678
+Epoch 41/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 5.263410/10 [==============================] - 0s 5ms/step - loss: 12.9041 - val_loss: 19.7265
+Epoch 42/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.366210/10 [==============================] - 0s 6ms/step - loss: 12.6987 - val_loss: 19.3800
+Epoch 43/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.037510/10 [==============================] - 0s 5ms/step - loss: 12.4790 - val_loss: 19.1709
+Epoch 44/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.169310/10 [==============================] - 0s 5ms/step - loss: 12.3415 - val_loss: 18.8776
+Epoch 45/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 18.124310/10 [==============================] - 0s 5ms/step - loss: 12.1331 - val_loss: 18.7619
+Epoch 46/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.936910/10 [==============================] - 0s 5ms/step - loss: 11.9282 - val_loss: 18.6128
+Epoch 47/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 4.827310/10 [==============================] - 0s 5ms/step - loss: 11.7415 - val_loss: 18.2456
+Epoch 48/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.715310/10 [==============================] - 0s 4ms/step - loss: 11.5493 - val_loss: 18.0722
+Epoch 49/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 4.562010/10 [==============================] - 0s 4ms/step - loss: 11.3665 - val_loss: 17.7838
+Epoch 50/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.426910/10 [==============================] - 0s 4ms/step - loss: 11.2289 - val_loss: 17.3654
+Epoch 51/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 8.688810/10 [==============================] - 0s 4ms/step - loss: 11.0452 - val_loss: 17.2921
+Epoch 52/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.073510/10 [==============================] - 0s 5ms/step - loss: 10.9149 - val_loss: 16.9543
+Epoch 53/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 11.901710/10 [==============================] - 0s 4ms/step - loss: 10.7255 - val_loss: 16.4681
+Epoch 54/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 9.820210/10 [==============================] - 0s 4ms/step - loss: 10.6900 - val_loss: 16.4361
+Epoch 55/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 6.931410/10 [==============================] - 0s 4ms/step - loss: 10.4187 - val_loss: 16.1096
+Epoch 56/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 6.189310/10 [==============================] - 0s 4ms/step - loss: 10.3181 - val_loss: 15.7102
+Epoch 57/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 19.928210/10 [==============================] - 0s 4ms/step - loss: 10.1698 - val_loss: 15.5604
+Epoch 58/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.511210/10 [==============================] - 0s 4ms/step - loss: 9.9940 - val_loss: 15.1299
+Epoch 59/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.699210/10 [==============================] - 0s 4ms/step - loss: 9.8396 - val_loss: 14.6021
+Epoch 60/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.725810/10 [==============================] - 0s 4ms/step - loss: 9.6505 - val_loss: 14.3557
+Epoch 61/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 12.788910/10 [==============================] - 0s 4ms/step - loss: 9.4016 - val_loss: 14.0355
+Epoch 62/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 9.317510/10 [==============================] - 0s 4ms/step - loss: 9.1871 - val_loss: 13.4808
+Epoch 63/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 13.012910/10 [==============================] - 0s 4ms/step - loss: 9.0255 - val_loss: 12.7705
+Epoch 64/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 9.506010/10 [==============================] - 0s 4ms/step - loss: 9.1125 - val_loss: 12.7066
+Epoch 65/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.973110/10 [==============================] - 0s 4ms/step - loss: 8.5621 - val_loss: 12.1827
+Epoch 66/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 8.834810/10 [==============================] - 0s 4ms/step - loss: 8.4245 - val_loss: 12.0025
+Epoch 67/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.851510/10 [==============================] - 0s 4ms/step - loss: 8.1133 - val_loss: 11.5961
+Epoch 68/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 9.227210/10 [==============================] - 0s 4ms/step - loss: 7.7905 - val_loss: 10.9517
+Epoch 69/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 11.365910/10 [==============================] - 0s 4ms/step - loss: 7.4256 - val_loss: 10.5733
+Epoch 70/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 4.854210/10 [==============================] - 0s 4ms/step - loss: 6.9310 - val_loss: 9.9457
+Epoch 71/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 8.491310/10 [==============================] - 0s 4ms/step - loss: 6.7352 - val_loss: 9.5454
+Epoch 72/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 5.600010/10 [==============================] - 0s 4ms/step - loss: 6.2216 - val_loss: 8.8446
+Epoch 73/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.483310/10 [==============================] - 0s 4ms/step - loss: 6.0779 - val_loss: 8.3606
+Epoch 74/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 4.601910/10 [==============================] - 0s 4ms/step - loss: 5.6240 - val_loss: 7.6165
+Epoch 75/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 5.490410/10 [==============================] - 0s 4ms/step - loss: 5.2676 - val_loss: 7.1572
+Epoch 76/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 5.996510/10 [==============================] - 0s 4ms/step - loss: 4.8687 - val_loss: 6.6257
+Epoch 77/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 7.171110/10 [==============================] - 0s 4ms/step - loss: 4.2938 - val_loss: 5.7242
+Epoch 78/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 4.698410/10 [==============================] - 0s 4ms/step - loss: 3.8105 - val_loss: 5.2429
+Epoch 79/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 5.511710/10 [==============================] - 0s 4ms/step - loss: 3.5048 - val_loss: 4.8230
+Epoch 80/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 3.672110/10 [==============================] - 0s 4ms/step - loss: 3.1694 - val_loss: 4.6912
+Epoch 81/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.447510/10 [==============================] - 0s 4ms/step - loss: 2.9088 - val_loss: 4.4558
+Epoch 82/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 3.571010/10 [==============================] - 0s 4ms/step - loss: 2.6437 - val_loss: 4.0943
+Epoch 83/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.157510/10 [==============================] - 0s 4ms/step - loss: 2.5423 - val_loss: 3.9598
+Epoch 84/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.661110/10 [==============================] - 0s 4ms/step - loss: 2.4155 - val_loss: 3.8857
+Epoch 85/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.584810/10 [==============================] - 0s 4ms/step - loss: 2.3053 - val_loss: 3.9807
+Epoch 86/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.912810/10 [==============================] - 0s 4ms/step - loss: 2.2105 - val_loss: 3.6619
+Epoch 87/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.108310/10 [==============================] - 0s 4ms/step - loss: 2.1851 - val_loss: 3.9521
+Epoch 88/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.543810/10 [==============================] - 0s 5ms/step - loss: 2.0804 - val_loss: 3.7848
+Epoch 89/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.460910/10 [==============================] - 0s 5ms/step - loss: 2.0173 - val_loss: 3.6196
+Epoch 90/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.527010/10 [==============================] - 0s 5ms/step - loss: 1.9157 - val_loss: 4.0561
+Epoch 91/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.165810/10 [==============================] - 0s 4ms/step - loss: 1.8762 - val_loss: 3.9220
+Epoch 92/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.991810/10 [==============================] - 0s 4ms/step - loss: 1.8017 - val_loss: 4.2967
+Epoch 93/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.401110/10 [==============================] - 0s 4ms/step - loss: 1.7503 - val_loss: 4.1675
+Epoch 94/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.240410/10 [==============================] - 0s 4ms/step - loss: 1.7000 - val_loss: 4.2174
+Epoch 95/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.532610/10 [==============================] - 0s 4ms/step - loss: 1.6584 - val_loss: 4.3136
+Epoch 96/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.555110/10 [==============================] - 0s 4ms/step - loss: 1.6422 - val_loss: 4.5664
+Epoch 97/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.668110/10 [==============================] - 0s 4ms/step - loss: 1.6601 - val_loss: 4.3826
+Epoch 98/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.908410/10 [==============================] - 0s 4ms/step - loss: 1.6021 - val_loss: 4.4954
+Epoch 99/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.611010/10 [==============================] - 0s 4ms/step - loss: 1.6093 - val_loss: 4.3542
+Epoch 100/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.595110/10 [==============================] - 0s 4ms/step - loss: 1.5915 - val_loss: 4.4917
+Epoch 101/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.928010/10 [==============================] - 0s 4ms/step - loss: 1.5856 - val_loss: 4.3539
+Epoch 102/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.243710/10 [==============================] - 0s 5ms/step - loss: 1.6913 - val_loss: 4.3722
+Epoch 103/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.186810/10 [==============================] - 0s 4ms/step - loss: 1.6667 - val_loss: 4.5514
+Epoch 104/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.339110/10 [==============================] - 0s 4ms/step - loss: 1.6799 - val_loss: 4.2470
+Epoch 105/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.897210/10 [==============================] - 0s 4ms/step - loss: 1.5251 - val_loss: 4.2721
+Epoch 106/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.572410/10 [==============================] - 0s 4ms/step - loss: 1.4904 - val_loss: 4.1500
+Epoch 107/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.996010/10 [==============================] - 0s 4ms/step - loss: 1.5101 - val_loss: 4.4245
+Epoch 108/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.984210/10 [==============================] - 0s 4ms/step - loss: 1.5415 - val_loss: 4.4869
+Epoch 109/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.685510/10 [==============================] - 0s 4ms/step - loss: 1.5682 - val_loss: 4.2810
+Epoch 110/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.064710/10 [==============================] - 0s 4ms/step - loss: 1.5621 - val_loss: 4.7252
+Epoch 111/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.422310/10 [==============================] - 0s 5ms/step - loss: 1.4936 - val_loss: 4.0823
+Epoch 112/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.283010/10 [==============================] - 0s 5ms/step - loss: 1.4263 - val_loss: 4.3356
+Epoch 113/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.950510/10 [==============================] - 0s 6ms/step - loss: 1.4058 - val_loss: 4.3570
+Epoch 114/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.136410/10 [==============================] - 0s 5ms/step - loss: 1.4004 - val_loss: 4.2286
+Epoch 115/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.705810/10 [==============================] - 0s 6ms/step - loss: 1.3788 - val_loss: 4.2550
+Epoch 116/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.629410/10 [==============================] - 0s 5ms/step - loss: 1.3628 - val_loss: 4.1319
+Epoch 117/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.708710/10 [==============================] - 0s 6ms/step - loss: 1.3525 - val_loss: 4.2877
+Epoch 118/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.708710/10 [==============================] - 0s 5ms/step - loss: 1.3498 - val_loss: 4.0980
+Epoch 119/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.402210/10 [==============================] - 0s 5ms/step - loss: 1.3558 - val_loss: 4.3987
+Epoch 120/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.925310/10 [==============================] - 0s 6ms/step - loss: 1.3664 - val_loss: 4.0592
+Epoch 121/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.424310/10 [==============================] - 0s 5ms/step - loss: 1.3557 - val_loss: 4.1429
+Epoch 122/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.543410/10 [==============================] - 0s 5ms/step - loss: 1.3587 - val_loss: 4.3011
+Epoch 123/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.216210/10 [==============================] - 0s 6ms/step - loss: 1.3075 - val_loss: 4.1130
+Epoch 124/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.072210/10 [==============================] - 0s 6ms/step - loss: 1.3062 - val_loss: 4.1875
+Epoch 125/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.874910/10 [==============================] - 0s 6ms/step - loss: 1.2939 - val_loss: 4.1275
+Epoch 126/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.702210/10 [==============================] - 0s 6ms/step - loss: 1.2862 - val_loss: 4.1439
+Epoch 127/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.474810/10 [==============================] - 0s 5ms/step - loss: 1.2636 - val_loss: 4.2123
+Epoch 128/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.845910/10 [==============================] - 0s 5ms/step - loss: 1.2923 - val_loss: 4.0778
+Epoch 129/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.172510/10 [==============================] - 0s 5ms/step - loss: 1.2366 - val_loss: 4.1418
+Epoch 130/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.970910/10 [==============================] - 0s 5ms/step - loss: 1.2420 - val_loss: 4.0191
+Epoch 131/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.606310/10 [==============================] - 0s 5ms/step - loss: 1.2328 - val_loss: 4.0821
+Epoch 132/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.923010/10 [==============================] - 0s 5ms/step - loss: 1.2160 - val_loss: 3.9873
+Epoch 133/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.321610/10 [==============================] - 0s 5ms/step - loss: 1.2226 - val_loss: 3.9591
+Epoch 134/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.501110/10 [==============================] - 0s 5ms/step - loss: 1.2118 - val_loss: 3.9629
+Epoch 135/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.711510/10 [==============================] - 0s 5ms/step - loss: 1.2248 - val_loss: 3.9370
+Epoch 136/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.832710/10 [==============================] - 0s 5ms/step - loss: 1.2102 - val_loss: 4.1677
+Epoch 137/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.310510/10 [==============================] - 0s 5ms/step - loss: 1.2406 - val_loss: 3.9771
+Epoch 138/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.418410/10 [==============================] - 0s 5ms/step - loss: 1.2319 - val_loss: 3.9701
+Epoch 139/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.661410/10 [==============================] - 0s 5ms/step - loss: 1.2023 - val_loss: 4.0695
+Epoch 140/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.274910/10 [==============================] - 0s 6ms/step - loss: 1.1661 - val_loss: 3.8704
+Epoch 141/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.158410/10 [==============================] - 0s 5ms/step - loss: 1.1620 - val_loss: 3.7812
+Epoch 142/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.665310/10 [==============================] - 0s 5ms/step - loss: 1.1671 - val_loss: 4.0410
+Epoch 143/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.159310/10 [==============================] - 0s 5ms/step - loss: 1.1929 - val_loss: 3.8743
+Epoch 144/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.889010/10 [==============================] - 0s 16ms/step - loss: 1.1339 - val_loss: 3.8330
+Epoch 145/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.732310/10 [==============================] - 0s 11ms/step - loss: 1.1115 - val_loss: 4.2264
+Epoch 146/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.021110/10 [==============================] - 0s 8ms/step - loss: 1.1832 - val_loss: 3.7758
+Epoch 147/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.188310/10 [==============================] - 0s 7ms/step - loss: 1.1131 - val_loss: 3.9130
+Epoch 148/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.694610/10 [==============================] - 0s 8ms/step - loss: 1.1353 - val_loss: 4.0194
+Epoch 149/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.207310/10 [==============================] - 0s 6ms/step - loss: 1.1013 - val_loss: 3.8721
+Epoch 150/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.765910/10 [==============================] - 0s 6ms/step - loss: 1.0881 - val_loss: 3.7769
+Epoch 151/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.758310/10 [==============================] - 0s 7ms/step - loss: 1.1211 - val_loss: 3.9994
+Epoch 152/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.670210/10 [==============================] - 0s 7ms/step - loss: 1.0880 - val_loss: 3.8293
+Epoch 153/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.879710/10 [==============================] - 0s 6ms/step - loss: 1.0664 - val_loss: 3.9481
+Epoch 154/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.361810/10 [==============================] - 0s 6ms/step - loss: 1.0860 - val_loss: 3.7232
+Epoch 155/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 2.250510/10 [==============================] - 0s 6ms/step - loss: 1.0807 - val_loss: 3.8856
+Epoch 156/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.557610/10 [==============================] - 0s 6ms/step - loss: 1.0721 - val_loss: 3.8596
+Epoch 157/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.206110/10 [==============================] - 0s 7ms/step - loss: 1.0543 - val_loss: 3.6461
+Epoch 158/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.495410/10 [==============================] - 0s 6ms/step - loss: 1.0468 - val_loss: 3.8962
+Epoch 159/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.573710/10 [==============================] - 0s 6ms/step - loss: 1.1104 - val_loss: 3.7324
+Epoch 160/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.971510/10 [==============================] - 0s 6ms/step - loss: 1.0721 - val_loss: 3.6628
+Epoch 161/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.614410/10 [==============================] - 0s 6ms/step - loss: 1.0883 - val_loss: 3.8767
+Epoch 162/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.341110/10 [==============================] - 0s 5ms/step - loss: 1.0200 - val_loss: 3.7122
+Epoch 163/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.337110/10 [==============================] - 0s 6ms/step - loss: 1.0072 - val_loss: 3.7466
+Epoch 164/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.570610/10 [==============================] - 0s 6ms/step - loss: 1.0190 - val_loss: 3.7695
+Epoch 165/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.003910/10 [==============================] - 0s 5ms/step - loss: 0.9936 - val_loss: 3.7561
+Epoch 166/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.993310/10 [==============================] - 0s 5ms/step - loss: 0.9936 - val_loss: 3.5839
+Epoch 167/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.265110/10 [==============================] - 0s 5ms/step - loss: 0.9797 - val_loss: 3.6750
+Epoch 168/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.838910/10 [==============================] - 0s 5ms/step - loss: 0.9691 - val_loss: 3.5769
+Epoch 169/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.260610/10 [==============================] - 0s 8ms/step - loss: 0.9671 - val_loss: 3.6106
+Epoch 170/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.527310/10 [==============================] - 0s 9ms/step - loss: 0.9714 - val_loss: 3.6037
+Epoch 171/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.181810/10 [==============================] - 0s 9ms/step - loss: 0.9750 - val_loss: 3.4456
+Epoch 172/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.516810/10 [==============================] - 0s 11ms/step - loss: 1.0639 - val_loss: 3.9225
+Epoch 173/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.761510/10 [==============================] - 0s 11ms/step - loss: 1.0236 - val_loss: 3.5273
+Epoch 174/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.074110/10 [==============================] - 0s 11ms/step - loss: 0.9308 - val_loss: 3.5890
+Epoch 175/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.5207 8/10 [=======================&gt;......] - ETA: 0s - loss: 0.773810/10 [==============================] - 0s 19ms/step - loss: 0.9439 - val_loss: 3.6124
+Epoch 176/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.9722 7/10 [====================&gt;.........] - ETA: 0s - loss: 0.966710/10 [==============================] - 0s 23ms/step - loss: 0.9426 - val_loss: 3.6788
+Epoch 177/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.797910/10 [==============================] - 0s 11ms/step - loss: 0.9169 - val_loss: 3.5571
+Epoch 178/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.510310/10 [==============================] - 0s 10ms/step - loss: 0.9338 - val_loss: 3.5413
+Epoch 179/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.766110/10 [==============================] - 0s 8ms/step - loss: 0.9521 - val_loss: 3.5513
+Epoch 180/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.582610/10 [==============================] - 0s 9ms/step - loss: 0.9362 - val_loss: 3.5677
+Epoch 181/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.472810/10 [==============================] - 0s 8ms/step - loss: 0.9260 - val_loss: 3.6175
+Epoch 182/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.422810/10 [==============================] - 0s 7ms/step - loss: 0.9038 - val_loss: 3.3774
+Epoch 183/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.683310/10 [==============================] - 0s 6ms/step - loss: 0.8910 - val_loss: 3.5205
+Epoch 184/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.075410/10 [==============================] - 0s 10ms/step - loss: 0.9213 - val_loss: 3.4528
+Epoch 185/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.347710/10 [==============================] - 0s 7ms/step - loss: 0.9082 - val_loss: 3.5272
+Epoch 186/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.902810/10 [==============================] - 0s 6ms/step - loss: 0.9235 - val_loss: 3.5854
+Epoch 187/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.560110/10 [==============================] - 0s 29ms/step - loss: 0.8802 - val_loss: 3.4181
+Epoch 188/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.644910/10 [==============================] - 0s 13ms/step - loss: 0.8680 - val_loss: 3.3783
+Epoch 189/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.648910/10 [==============================] - 0s 11ms/step - loss: 0.8712 - val_loss: 3.5081
+Epoch 190/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.673910/10 [==============================] - 0s 12ms/step - loss: 0.8758 - val_loss: 3.3436
+Epoch 191/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.863710/10 [==============================] - 0s 19ms/step - loss: 0.8614 - val_loss: 3.5361
+Epoch 192/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.616510/10 [==============================] - 0s 12ms/step - loss: 0.8943 - val_loss: 3.6308
+Epoch 193/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.285910/10 [==============================] - 0s 10ms/step - loss: 0.8730 - val_loss: 3.3015
+Epoch 194/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.008810/10 [==============================] - 0s 7ms/step - loss: 0.8727 - val_loss: 3.5948
+Epoch 195/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.032110/10 [==============================] - 0s 7ms/step - loss: 0.8475 - val_loss: 3.2088
+Epoch 196/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.154610/10 [==============================] - 0s 8ms/step - loss: 0.8609 - val_loss: 3.3008
+Epoch 197/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.931710/10 [==============================] - 0s 7ms/step - loss: 0.8234 - val_loss: 3.5025
+Epoch 198/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.486610/10 [==============================] - 0s 6ms/step - loss: 0.8113 - val_loss: 3.2583
+Epoch 199/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 0.178710/10 [==============================] - 0s 8ms/step - loss: 0.8164 - val_loss: 3.2970
+Epoch 200/200
+ 1/10 [==&gt;...........................] - ETA: 0s - loss: 1.018210/10 [==============================] - 0s 7ms/step - loss: 0.7988 - val_loss: 3.4303
+1/2 [==============&gt;...............] - ETA: 0s2/2 [==============================] - 0s 4ms/step
+Mean Squared Error: 3.430276167557704</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-2.png" width="593" height="449"></p>
+</div>
+</div>
+<p>The neural network model is trained and validated, and the mean squared error is computed.</p>
+<p><strong>Conclusion</strong></p>
+<p>In conclusion, the advertising dataset provides a fascinating journey into the world of predictive analytics. From understanding data distributions to exploring correlations and implementing various regression techniques, we’ve gained valuable insights into the impact of advertising budgets on sales. Whether through linear regression, polynomial regression, or neural networks, the tools at our disposal allow us to make informed decisions.</p>
+<p>This analysis serves as a foundation for further exploration and refinement, empowering marketers to optimize their strategies and maximize the impact of advertising budgets on sales.</p>
+<div class="footer">
+
+<hr>
+<h3 class="anchored">
+Connect with me on GitHub
+</h3>
+<p>
+Find more projects and articles on my <a href="https://github.com/gayatribkar">GitHub</a>.
+</p>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

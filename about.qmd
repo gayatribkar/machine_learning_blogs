@@ -1,0 +1,15 @@
+---
+title: "About"
+image: profile.png
+about:
+  template: jolla
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/gayatri-bhatambarekar/
+    - icon: github
+      text: Github
+      href: https://github.com/gayatribkar
+---
+
+Hello, I'm Gayatri Milind Bhatambarekar, a dedicated graduate student pursuing a Master's in Computer Science at VT. I'm thrilled to invite you into my world of machine learning exploration through my blogs. Here, you'll find a diverse range of topics, from unraveling the intricacies of probability theory and random variables to exploring clustering techniques, understanding regression models, delving into classification methods, and mastering anomaly/outlier detection. Join me on this learning journey, and let's explore the fascinating domain of machine learning together. Feel free to connect, share your thoughts, and enjoy the exciting insights we uncover along the way. Happy reading!

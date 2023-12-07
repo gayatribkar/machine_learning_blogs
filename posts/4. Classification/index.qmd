@@ -1,0 +1,456 @@
+---
+title: "Exploring Diabetes Prediction Models: A Comparative Analysis (BLOG ON CLASSIFICATION)"
+author: "Gayatri Milind Bhatambarekar"
+date: today
+categories: [Exploratory Data Analysis (EDA), Classification, K-Nearest Neighbors, Support Vector Classifier, Decision Tree Classifier]
+image: "diabetes_img.jpg"
+editor_options: 
+  chunk_output_type: console
+---
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+</style>
+
+Diabetes is a widespread health concern affecting a large population globally. Identifying diabetes in its early stages poses a significant challenge, emphasizing the crucial role of advanced technologies in healthcare. Among these, machine learning models have emerged as invaluable tools for predicting the likelihood of diabetes onset. This blog focuses on three key classification algorithms—K-nearest neighbors (KNN), Support Vector Classifier (SVC), and Decision Tree Classifier (DTC). By understanding and comparing their strengths and nuances, we gain insights into the contributions of machine learning to healthcare, specifically in the context of diabetes identification.
+
+
+**Data Exploration and Preprocessing**
+
+Let's start by loading and exploring the diabetes dataset. We will examine the data's structure, and summary statistics to understand the relationships between features.
+
+```{python}
+# Importing necessary libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Loading the dataset
+df = pd.read_csv('diabetes.csv')
+
+# Displaying the first 10 rows of the dataset
+df.head(10)
+```
+
+```{python}
+# Checking the shape and data types of the dataset
+print(df.shape)
+print(df.dtypes)
+
+```
+
+```{python}
+# Descriptive statistics of the dataset
+df.describe()
+```
+
+```{python}
+# Checking for missing values
+df.isnull().any()
+```
+
+
+**Feature Correlation**
+
+Understanding the correlation between features is essential in selecting appropriate variables for the models. We visualize this correlation using a heatmap:
+
+```{python}
+correlation_matrix = df.corr()
+plt.figure(figsize=(8, 6 ))
+sns.heatmap(correlation_matrix, annot=True, cmap='inferno', fmt=".2f")
+plt.title('Feature Correlation Heatmap')
+plt.show()
+
+```
+The 3D scatter plot with decision surfaces shown below visualizes the diabetes dataset. Each dot represents an individual, colored based on the likelihood of diabetes (Outcome). The three axes—Glucose, BMI, and Age—provide a multidimensional view, and hovering over the plot reveals the decision surfaces, offering insights into the complex relationships among these features. 
+
+```{python}
+import plotly.express as px
+
+# 3D Scatter plot with decision surfaces
+fig = px.scatter_3d(df, x='Glucose', y='BMI', z='Age', color='Outcome',
+                    opacity=0.7, size_max=10)
+
+fig.update_traces(marker=dict(size=4),
+                  selector=dict(mode='markers'))
+
+fig.update_layout(scene=dict(
+                    xaxis=dict(title='Glucose'),
+                    yaxis=dict(title='BMI'),
+                    zaxis=dict(title='Age'),
+                    ))
+
+fig.update_layout(title_text='3D Scatter Plot with Decision Surfaces')
+fig.show()
+
+```
+
+
+**Data Splitting**
+
+To train and evaluate our models, we split the dataset into training and testing sets:
+
+```{python}
+
+from sklearn.model_selection import train_test_split
+
+X = df.drop('Outcome', axis=1)
+y = df['Outcome']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+
+print("The shape of X_train is:", X_train.shape)
+print("The shape of X_test is:", X_test.shape)
+print("The shape of y_train is:", y_train.shape)
+print("The shape of y_test is:", y_test.shape)
+```
+
+
+**K-Nearest Neighbors (KNN)**
+
+KNN is a simple yet effective algorithm that classifies a data point based on the majority class of its k-nearest neighbors. The choice of 'k' determines the number of neighbors considered when making a prediction. This model is particularly intuitive, as it operates on the principle that similar instances in a feature space tend to belong to the same class.
+
+Now, let's explore the first model - KNN:
+
+```{python}
+from sklearn.neighbors import KNeighborsClassifier 
+from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+
+knn = KNeighborsClassifier(n_neighbors=5, metric='minkowski', p=2)  
+knn.fit(X_train, y_train)
+
+# Prediction and evaluation
+y_pred_knn = knn.predict(X_test)
+
+confusion_matrix_knn = confusion_matrix(y_test, y_pred_knn)
+print("Confusion Matrix - KNN")
+# Plot Confusion Matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_matrix_knn, annot=True, fmt='d', cmap='Blues', cbar=False,
+            xticklabels=['Class 0', 'Class 1'],
+            yticklabels=['Class 0', 'Class 1'])
+plt.title('Confusion Matrix - KNN')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.show()
+```
+
+```{python}
+# Classification report and performance metrics
+classification_report_knn = classification_report(y_test, y_pred_knn)
+print("Classification Report - KNN")
+print(classification_report_knn)
+```
+
+```{python}
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred_knn).ravel()
+accuracy  =(tp+tn)/(tp+tn+fp+fn)
+precision =(tp)/(tp+fp)
+recall  =(tp)/(tp+fn)
+f1 =2*(( precision* recall)/( precision + recall))
+
+print('Accuracy:\t',accuracy*100,
+    '\nPrecision:\t',precision*100,
+    '\nRecall: \t',recall*100,
+    '\nF1-Score:\t',f1*100)
+```
+
+```{python}
+# ROC Curve and Precision-Recall Curve
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc, precision_recall_curve
+
+fpr, tpr, _ = roc_curve(y_test, y_pred_knn)
+roc_auc = auc(fpr, tpr)
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve - KNN')
+plt.legend(loc='lower right')
+plt.show()
+```
+
+```{python}
+precision, recall, _ = precision_recall_curve(y_test, y_pred_knn)
+
+plt.figure(figsize=(8, 6))
+plt.step(recall, precision, color='b', alpha=0.2, where='post')
+plt.fill_between(recall, precision, step='post', alpha=0.2, color='b')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.ylim([0.0, 1.05])
+plt.xlim([0.0, 1.0])
+plt.title('Precision-Recall Curve - KNN')
+plt.show()
+
+```
+
+
+**Support Vector Classifier (SVC)**
+
+SVC is a powerful model for both classification and regression tasks. It works by finding a hyperplane that best separates the data points into different classes. The flexibility of SVC lies in its ability to handle complex decision boundaries, making it suitable for scenarios where data is not linearly separable.
+
+```{python}
+
+from sklearn.svm import SVC
+from sklearn import metrics
+
+# Initializing and fitting the SVC model
+m = SVC(C=1)
+m.fit(X_train, y_train)
+y_pred_svc = m.predict(X_test)
+
+# Confusion matrix
+confusion_matrix_svc = confusion_matrix(y_test, y_pred_svc)
+
+# Plot Confusion Matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_matrix_svc, annot=True, fmt='d', cmap='Blues', cbar=False,
+            xticklabels=['Class 0', 'Class 1'],
+            yticklabels=['Class 0', 'Class 1'])
+plt.title('Confusion Matrix - SVC')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.show()
+
+```
+
+```{python}
+classification_report_svc = classification_report(y_test, y_pred_svc)
+print("Classification Report - SVC")
+print(classification_report_svc)
+```
+
+```{python}
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred_svc).ravel()
+accuracysvc  =(tp+tn)/(tp+tn+fp+fn)
+precisionsvc =(tp)/(tp+fp)
+recallsvc =(tp)/(tp+fn)
+f1svc =2*(( precisionsvc* recallsvc)/( precisionsvc + recallsvc))
+
+print('Accuracy:\t',accuracysvc*100,
+    '\nPrecision:\t',precisionsvc*100,
+    '\nRecall: \t',recallsvc*100,
+    '\nF1-Score:\t',f1svc*100)
+```
+
+```{python}
+# ROC Curve and Precision-Recall Curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_svc)
+roc_auc = auc(fpr, tpr)
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve - SVC')
+plt.legend(loc='lower right')
+plt.show()
+
+```
+
+```{python}
+precision, recall, _ = precision_recall_curve(y_test, y_pred_svc)
+
+plt.figure(figsize=(8, 6))
+plt.step(recall, precision, color='b', alpha=0.2, where='post')
+plt.fill_between(recall, precision, step='post', alpha=0.2, color='b')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.ylim([0.0, 1.05])
+plt.xlim([0.0, 1.0])
+plt.title('Precision-Recall Curve - SVC')
+plt.show()
+```
+
+
+**Decision Tree Classifier**
+
+Finally, exploring the Decision Tree model:
+Decision trees are tree-like models where each internal node represents a decision based on the value of a particular feature. These decisions lead to different branches, eventually reaching leaf nodes that represent the class labels. Decision trees are easy to interpret and visualize, making them a popular choice for various applications.
+
+```{python}
+from sklearn.tree import DecisionTreeClassifier
+
+# Initializing and fitting the Decision Tree model
+dclf = DecisionTreeClassifier()
+dclf.fit(X_train, y_train)
+
+# Prediction and evaluation
+y_pred_dt = dclf.predict(X_test)
+
+# Confusion matrix 
+confusion_matrix_dt = confusion_matrix(y_test, y_pred_dt)
+print("Confusion Matrix - DT")
+
+# Plot Confusion Matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_matrix_dt, annot=True, fmt='d', cmap='Blues', cbar=False,
+            xticklabels=['Class 0', 'Class 1'],
+            yticklabels=['Class 0', 'Class 1'])
+plt.title('Confusion Matrix - DT')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.show()
+
+```
+
+```{python}
+# Classification report and performance metrics
+classification_report_dt = classification_report(y_test, y_pred_dt)
+print("Classification Report - DT")
+print(classification_report_dt)
+```
+
+
+```{python}
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred_dt).ravel()
+accuracydt  =(tp+tn)/(tp+tn+fp+fn)
+precisiondt =(tp)/(tp+fp)
+recalldt =(tp)/(tp+fn)
+f1dt =2*(( precisiondt* recalldt)/( precisiondt + recalldt))
+
+print('Accuracy:\t',accuracydt*100,
+    '\nPrecision:\t',precisiondt*100,
+    '\nRecall: \t',recalldt*100,
+    '\nF1-Score:\t',f1dt*100)
+```
+
+
+```{python}
+# ROC Curve and Precision-Recall Curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_dt)
+roc_auc = auc(fpr, tpr)
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve - DT')
+plt.legend(loc='lower right')
+plt.show()
+
+
+```
+
+```{python}
+precision, recall, _ = precision_recall_curve(y_test, y_pred_dt)
+
+plt.figure(figsize=(8, 6))
+plt.step(recall, precision, color='b', alpha=0.2, where='post')
+plt.fill_between(recall, precision, step='post', alpha=0.2, color='b')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.ylim([0.0, 1.05])
+plt.xlim([0.0, 1.0])
+plt.title('Precision-Recall Curve - DT')
+plt.show()
+```
+
+**Model Comparison Analysis**
+Let's analyze and compare the performance metrics of each model to gain insights into their effectiveness in predicting diabetes.
+
+```{python}
+plt.figure(figsize=(8, 6))
+
+# KNN
+fpr_knn, tpr_knn, _ = roc_curve(y_test, y_pred_knn)
+roc_auc_knn = auc(fpr_knn, tpr_knn)
+plt.plot(fpr_knn, tpr_knn, label=f'KNN (AUC = {roc_auc_knn:.2f})')
+
+# SVC
+fpr_svc, tpr_svc, _ = roc_curve(y_test, y_pred_svc)
+roc_auc_svc = auc(fpr_svc, tpr_svc)
+plt.plot(fpr_svc, tpr_svc, label=f'SVC (AUC = {roc_auc_svc:.2f})')
+
+# Decision Tree
+fpr_dtc, tpr_dtc, _ = roc_curve(y_test, y_pred_dt)
+roc_auc_dtc = auc(fpr_dtc, tpr_dtc)
+plt.plot(fpr_dtc, tpr_dtc, label=f'DT(AUC = {roc_auc_dtc:.2f})')
+
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve - Model Comparison')
+plt.legend(loc='lower right')
+plt.show()
+
+```
+
+```{python}
+plt.figure(figsize=(8, 6))
+
+# KNN
+precision_knn, recall_knn, _ = precision_recall_curve(y_test, y_pred_knn)
+plt.plot(recall_knn, precision_knn, label=f'KNN')
+
+# SVC
+precision_svc, recall_svc, _ = precision_recall_curve(y_test, y_pred_svc)
+plt.plot(recall_svc, precision_svc, label=f'SVC')
+
+# Decision Tree
+precision_dtc, recall_dtc, _ = precision_recall_curve(y_test, y_pred_dt)
+plt.plot(recall_dtc, precision_dtc, label=f'Decision Tree')
+
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.ylim([0.0, 1.05])
+plt.xlim([0.0, 1.0])
+plt.title('Precision-Recall Curve - Model Comparison')
+plt.legend()
+plt.show()
+
+```
+
+
+**Comparison Analysis**
+
+**Accuracy:**
+KNN and SVC show similar accuracy, both around 77%, while Decision Tree lags slightly behind at 68%.
+
+**Precision:**
+SVC has the highest precision at 83.33%, indicating a low rate of false positives. KNN follows with 73.53%, and Decision Tree has the lowest precision at 58.33%.
+
+**Recall:**
+KNN has the highest recall at 58.82%, followed by Decision Tree (49.41%), and SVC with the lowest recall at 47.06%.
+
+**F1-Score:**
+KNN achieves the highest F1-score at 65.36%, followed by SVC (60.15%), and  Decision Tree with a slightly lower F1-score of 53.58%.
+
+
+
+**Conclusion**
+
+
+In conclusion, the choice of a diabetes prediction model depends on specific goals and priorities. For instance, if minimizing false positives is crucial, the higher precision of SVC might be favored. If balancing precision and recall is important, KNN could be a reasonable choice with its relatively balanced performance. KNN excels in simplicity and interpretability, SVC in handling complex decision boundaries, and Decision Trees in providing a clear decision-making structure. The detailed analysis and graphical representation empower decision-makers to choose the model that aligns with the unique requirements of the prediction task.
+
+
+<div class="footer">
+  <!-- <hr>
+
+<!-- <div class="comment-container">
+  <h3>Share Your Thoughts</h3>
+  <p>Provide your feedback and thoughts on this article. We appreciate your input!</p>
+
+  <div class="comment-form">
+    <textarea id="feedback" rows="4" style="width: 100%;" placeholder="Your feedback here..."></textarea>
+    <br>
+    <button class="signin-button" onclick="signInWithGitHub()">Sign In with GitHub</button>
+  </div> -->
+<!-- </div> --> -->
+
+
+  <hr>
+
+  <h3>Connect with me on GitHub</h3>
+  <p>Find more projects and articles on my [GitHub](https://github.com/gayatribkar).</p>
+</div>
+

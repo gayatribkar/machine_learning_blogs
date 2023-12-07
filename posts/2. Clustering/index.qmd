@@ -1,0 +1,402 @@
+---
+title: "Unveiling Customer Segmentation through RFM Analysis and K-Means Clustering (BLOG ON CLUSTERING)"
+author: "Gayatri Milind Bhatambarekar"
+date: today
+categories: [Clustering, K-Means Clustering, RFM analysis]
+image: "sales_img.png"
+editor_options: 
+  chunk_output_type: console
+---
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+
+</style>
+
+In the world of business, understanding your customers is paramount. It's not just about the products or services you offer; it's about knowing your customers' preferences, behaviors, and how they engage with your brand. One powerful tool for gaining such insights is RFM analysis combined with K-Means clustering.
+
+
+
+**Exploring the Sales Dataset**
+
+Our blog begins with exploring the sales dataset. We load the dataset, taking a sneak peek at the first 10 rows to get a sense of the data's structure.
+
+```{python}
+# Importing necessary libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the sales dataset
+df = pd.read_csv('sales_data_sample.csv', encoding='unicode_escape')
+
+# Display the first few rows
+df.head()
+
+```
+
+```{python}
+# Checking the shape and data types of the dataset
+print(df.shape)
+
+```
+The dataset comprises various columns, including order numbers, quantities ordered, prices, order dates, customer details, and more. With 2823 rows, it offers a substantial amount of data for our analysis.
+
+```{python}
+# Descriptive statistics of the dataset
+df.describe()
+```
+
+**Data Cleaning and Transformation**
+
+Before diving into analysis, we will first perform data cleaning and transformation. We drop unnecessary columns that won't significantly contribute to our analysis, such as phone numbers and addresses.
+
+```{python}
+# Drop unnecessary columns
+to_drop = ['PHONE', 'ADDRESSLINE1', 'ADDRESSLINE2', 'STATE', 'POSTALCODE']
+df = df.drop(to_drop, axis=1)
+```
+
+Additionally, we convert the 'ORDERDATE' column to a proper date format for easier handling later in our analysis.
+
+```{python}
+# Convert 'ORDERDATE' to datetime format
+df['ORDERDATE'] = pd.to_datetime(df['ORDERDATE'])
+
+```
+
+**RFM Analysis: Understanding Customer Behavior** 
+
+
+RFM analysis involves three key metrics:
+
+Recency, Frequency, and MonetaryValue. These metrics provide a holistic view of customer behavior.
+
+**Recency:**
+Recency represents how recently a customer made a purchase. We calculate it by finding the number of days since the last purchase for each customer.
+
+**Frequency:**
+Frequency measures how often a customer makes a purchase. It is simply the count of orders placed by a customer.
+
+**MonetaryValue:**
+MonetaryValue is the total amount a customer has spent on purchases.
+
+```{python}
+# Calculate Recency, Frequency, and MonetaryValue for each customer
+latest_date = df['ORDERDATE'].max() + pd.to_timedelta(1, 'D')  # Latest date in the dataset
+
+df_RFM = df.groupby(['CUSTOMERNAME'])
+df_RFM = df_RFM.agg({
+    'ORDERDATE': lambda x: (latest_date - x.max()).days,
+    'ORDERNUMBER': 'count',
+    'SALES': 'sum'
+})
+
+# Rename columns for clarity
+df_RFM.rename(columns={'ORDERDATE': 'Recency', 'ORDERNUMBER': 'Frequency', 'SALES': 'MonetaryValue'}, inplace=True)
+
+# Display the first few rows of the RFM data
+df_RFM.head()
+
+```
+Our RFM data now provides insights into how recently customers made a purchase, how frequently they buy, and how much money they spend.
+
+
+**Data Exploration and Visualization**
+
+The scatter plot below illustrates the relationship between the quantity of items ordered and the corresponding total sales. Each point on the graph represents a transaction, allowing us to visually assess how changes in quantity impact overall sales.
+
+```{python}
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='QUANTITYORDERED', y='SALES', data=df, s=50)
+plt.title('Scatter Plot: Quantity Ordered vs Sales')
+plt.xlabel('Quantity Ordered')
+plt.ylabel('Sales')
+plt.show()
+
+```
+
+In the scatter plot depicted, we delve into the connection between the price of individual items and the resulting sales. This visualization helps us discern any patterns or trends in sales concerning the pricing of products.
+
+```{python}
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='PRICEEACH', y='SALES', data=df, s=50)
+plt.title('Scatter Plot: Price Each vs Sales')
+plt.xlabel('Price Each')
+plt.ylabel('Sales')
+plt.show()
+
+```
+
+The box plot provides a overview of sales distribution across different countries. Each box represents the interquartile range of sales within a specific country, offering insights into the variability and central tendencies of sales data.
+
+
+```{python}
+plt.figure(figsize=(9, 5))
+sns.boxplot(x='COUNTRY', y='SALES', data=df)
+plt.title('Box Plot: Sales by Country')
+plt.xlabel('Country')
+plt.ylabel('Sales')
+plt.xticks(rotation=45, ha='right')
+plt.show()
+
+
+```
+
+Before diving into the clustering process, let's explore our data visually. We create histograms to visualize the distribution of Recency, Frequency, and MonetaryValue.
+
+```{python}
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Visualize the distribution of Recency, Frequency, and MonetaryValue
+plt.figure(figsize=(9, 5))
+
+plt.subplot(1, 3, 1)
+sns.histplot(df_RFM['Recency'], kde=True)
+plt.title('Distribution of Recency')
+
+plt.subplot(1, 3, 2)
+sns.histplot(df_RFM['Frequency'], kde=True)
+plt.title('Distribution of Frequency')
+
+plt.subplot(1, 3, 3)
+sns.histplot(df_RFM['MonetaryValue'], kde=True)
+plt.title('Distribution of MonetaryValue')
+
+plt.suptitle('Distribution of RFM Metrics')
+plt.show()
+
+```
+
+These histograms give us a glimpse into the distribution of Recency, Frequency, and MonetaryValue. We observe the skewness and decide to apply a log transformation to address this.
+
+**Log Transformation and Standardization**
+
+To handle skewed data, we perform a log transformation on the RFM values. This not only helps in scaling the data but also in normalizing it.
+
+
+```{python}
+import numpy as np
+
+# Log transformation of the RFM data
+data_log = np.log(df_RFM)
+
+# Display the first few rows of the log-transformed data
+data_log.head()
+
+```
+
+Next, we standardize the log-transformed data using the StandardScaler.
+
+```{python}
+from sklearn.preprocessing import StandardScaler
+
+# Initialize the scaler
+scaler = StandardScaler()
+
+# Fit and transform the log-transformed data
+data_normalized = scaler.fit_transform(data_log)
+
+# Create a DataFrame with the normalized data
+data_normalized = pd.DataFrame(data_normalized, index=data_log.index, columns=data_log.columns)
+
+# Display summary statistics of the standardized data
+data_normalized.describe().round(2)
+
+```
+
+Our RFM data is now transformed, scaled, and ready for the next step: K-Means Clustering.
+
+
+**K-Means Clustering: Unveiling Customer Segments**
+
+K-Means clustering is a powerful technique to group similar data points into clusters. The elbow method helps us determine the optimal number of clusters.
+
+
+
+```{python}
+
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Calculate SSE for different values of k (number of clusters)
+sse = {}
+for k in range(1, 21):
+    kmeans = KMeans(n_clusters=k, random_state=1, n_init=10)  # Set n_init explicitly
+    kmeans.fit(data_normalized)
+    sse[k] = kmeans.inertia_
+
+plt.figure(figsize=(9, 5))
+plt.title('The Elbow Method')
+
+# Add X-axis label "k"
+plt.xlabel('k')
+
+# Add Y-axis label "SSE"
+plt.ylabel('SSE')
+
+#Plot SSE values for each key in the dictionary
+sns.pointplot(x=list(sse.keys()), y=list(sse.values()))
+# plt.text(4.5, 60, "Largest Angle", bbox=dict(facecolor='lightgreen', alpha=0.5))
+plt.show()
+
+```
+
+The elbow method guides us in choosing the number of clusters. In this case, we observe an 'elbow' around 3 clusters, indicating a reasonable balance between model complexity and performance.
+
+Now, we proceed with K-Means clustering using 3 clusters.
+
+```{python}
+# Initialize KMeans with 3 clusters
+kmeans = KMeans(n_clusters=3, random_state=1, n_init=10)
+
+# Fit KMeans on the normalized data
+kmeans.fit(data_normalized)
+
+# Extract cluster labels
+cluster_labels = kmeans.labels_
+
+# Add cluster labels to the original RFM data
+data_rfm = df_RFM.assign(Cluster=cluster_labels)
+
+# Display the first few rows of the clustered data
+data_rfm.head()
+
+```
+
+Our data is now enriched with cluster labels, revealing the segment to which each customer belongs.
+
+
+**Cluster Analysis: Deciphering Customer Characteristics**
+
+With customers grouped into clusters, we analyze each cluster's characteristics, focusing on average Recency, Frequency, and MonetaryValue.
+
+```{python}
+# Group the data by cluster
+grouped = data_rfm.groupby(['Cluster'])
+
+# Calculate average RFM values and segment sizes per cluster
+cluster_stats = grouped.agg({
+    'Recency': 'mean',
+    'Frequency': 'mean',
+    'MonetaryValue': ['mean', 'count']
+}).round(1)
+
+# Display the cluster statistics
+cluster_stats
+
+```
+
+The cluster statistics showcase the average Recency, Frequency, and MonetaryValue for each cluster, providing insights into their unique characteristics.
+
+
+**Relative Importance: What Sets Each Cluster Apart?**
+
+To understand what distinguishes each cluster, we calculate the relative importance of each RFM attribute within each cluster compared to the entire customer population.
+
+
+```{python}
+# Calculate relative importance of each attribute within each cluster
+cluster_avg = data_rfm.groupby(['Cluster']).mean()
+population_avg = df_RFM.mean()
+
+# Calculate relative importance
+relative_imp = cluster_avg / population_avg - 1
+
+# Display relative importance scores
+relative_imp.round(2)
+
+```
+
+These relative importance scores shed light on how each cluster deviates from the overall customer population.
+
+**Visualizing Customer Segmentation**
+
+The real power of our analysis comes when we visualize customer segmentation. We create scatter plots, pair plots, and even a 3D scatter plot to provide a comprehensive view.
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Scatter plot of Recency vs Frequency with clusters
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='Recency', y='Frequency', hue='Cluster', data=data_rfm, palette='viridis', s=50)
+plt.title('K-Means Clustering: Recency vs Frequency')
+plt.xlabel('Recency (days)')
+plt.ylabel('Frequency')
+plt.legend(title='Cluster')
+plt.show()
+```
+
+```{python}
+# Scatter plot of Frequency vs MonetaryValue with clusters
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='Frequency', y='MonetaryValue', hue='Cluster', data=data_rfm, palette='viridis', s=50)
+plt.title('K-Means Clustering: Frequency vs MonetaryValue')
+plt.xlabel('Frequency')
+plt.ylabel('MonetaryValue')
+plt.legend(title='Cluster')
+plt.show()
+
+```
+
+```{python}
+# Scatter plot of Recency vs MonetaryValue with clusters
+plt.figure(figsize=(9, 5))
+sns.scatterplot(x='Recency', y='MonetaryValue', hue='Cluster', data=data_rfm, palette='viridis', s=50)
+plt.title('K-Means Clustering: Recency vs MonetaryValue')
+plt.xlabel('Recency (days)')
+plt.ylabel('MonetaryValue')
+plt.legend(title='Cluster')
+plt.show()
+```
+
+```{python}
+# Pair plot with clusters
+sns.pairplot(data_rfm, hue='Cluster', palette='viridis', diag_kind='kde', height=3)
+plt.suptitle('Pair Plot with Clusters', y=1.02, size=16)
+plt.show()
+```
+
+```{python}
+# 3D Scatter plot with clusters
+fig = plt.figure(figsize=(12, 10))
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(data_rfm['Recency'], data_rfm['Frequency'], data_rfm['MonetaryValue'], c=data_rfm['Cluster'], cmap='viridis', s=50)
+ax.set_xlabel('Recency (days)')
+ax.set_ylabel('Frequency')
+ax.set_zlabel('MonetaryValue')
+ax.set_title('3D Scatter Plot with Clusters')
+plt.show()
+
+```
+
+These visualizations provide an intuitive understanding of how customers are segmented based on Recency, Frequency, and MonetaryValue.
+
+**Conclusion**
+
+In this blog of data exploration and analysis, we have unraveled valuable insights into customer behavior. Through RFM analysis and K-Means clustering, we've segmented customers into distinct groups, each with its own characteristics and relative importance.
+
+Understanding these customer segments empowers businesses to tailor their strategies, personalize marketing efforts, and enhance overall customer experience. 
+
+
+
+<div class="footer">
+
+
+  <hr>
+
+  <h3>Connect with me on GitHub</h3>
+  <p>Find more projects and articles on my [GitHub](https://github.com/gayatribkar).</p>
+</div>
+

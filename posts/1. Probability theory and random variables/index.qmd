@@ -1,0 +1,267 @@
+---
+title: "Decoding Customer Behavior: An In-Depth Analysis with Naive Bayes Classifier (BLOG ON PROBABILITY THEORY AND RANDOM VARIABLES)"
+author: "Gayatri Milind Bhatambarekar"
+date: today
+categories: [Exploratory Data Analysis (EDA), Probability Theory, Random Variables, Naive Bayes Classifier]
+image: "consumer_img.jpg"
+editor_options: 
+  chunk_output_type: console
+---
+<style>
+
+
+  .footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+
+</style>
+
+Understanding customer behavior is a crucial aspect of strategic decision-making for businesses. In this blog post, we delve into a dataset containing information about 400 clients, exploring their demographics, purchasing decisions, and applying a Naive Bayes classifier to predict whether a customer will make a purchase based on their age and estimated salary.
+
+
+
+**Exploring the customer behavior dataset**
+
+```{python}
+
+# Importing necessary libraries
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, roc_curve, auc
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+
+# Loading the dataset
+df = pd.read_csv("Customer_Behaviour.csv")
+df.head(10)
+
+```
+
+```{python}
+# Checking the shape and data types of the dataset
+print(df.shape)
+print(df.dtypes)
+
+```
+
+```{python}
+# Descriptive statistics of the dataset
+df.describe()
+```
+```{python}
+# Visualizing the data
+# Pairplot
+sns.pairplot(df, hue='Purchased', diag_kind='kde')
+plt.show()
+```
+
+Understanding the correlation between features is essential in selecting appropriate variables for the models. We visualize this correlation using a heatmap:
+
+```{python}
+# Exclude non-numeric columns
+numeric_columns = df.select_dtypes(include=[np.number]).columns
+corr_matrix = df[numeric_columns].corr()
+
+# Visualize the correlation matrix
+sns.heatmap(corr_matrix, annot=True, linewidths=0.5)
+plt.title("Correlation Matrix")
+plt.show()
+
+```
+
+```{python}
+# Histograms and KDE for Age
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+sns.histplot(df[df['Purchased'] == 1]['Age'], kde=True, color='blue', label='Purchased=1')
+sns.histplot(df[df['Purchased'] == 0]['Age'], kde=True, color='orange', label='Purchased=0')
+plt.title('Distribution of Age for Purchased/Not Purchased')
+plt.legend()
+
+# Histograms and KDE for Estimated Salary
+plt.subplot(1, 2, 2)
+sns.histplot(df[df['Purchased'] == 1]['EstimatedSalary'], kde=True, color='blue', label='Purchased=1')
+sns.histplot(df[df['Purchased'] == 0]['EstimatedSalary'], kde=True, color='orange', label='Purchased=0')
+plt.title('Distribution of Estimated Salary for Purchased/Not Purchased')
+plt.legend()
+
+plt.show()
+
+```
+To visualize the distribution of age and estimated salary separately for customers who made a purchase (Purchased=1) and those who did not (Purchased=0). The above plot provides a clearer understanding of the characteristics of customers in each category.
+
+
+**Probability Theory and Random Variables**
+
+Next, we apply probability theory to calculate the likelihood of customers making a purchase or not. The probabilities of purchase (Purchased=1) and no purchase (Purchased=0) provide a foundational understanding of the dataset. We then categorize age and salary into bins, allowing us to compute conditional probabilities for different age and salary groups.
+
+```{python}
+# Code for calculating probabilities
+total_samples = len(df)
+p_purchase = len(df[df['Purchased'] == 1]) / total_samples
+p_no_purchase = len(df[df['Purchased'] == 0]) / total_samples
+
+print(f"Probability of Purchase: {p_purchase:.2f}")
+print(f"Probability of No Purchase: {p_no_purchase:.2f}")
+
+```
+
+```{python}
+# Code for calculating conditional probabilities for 'Age' and 'EstimatedSalary'
+# Define age and salary categories
+age_bins = [0, 30, 40, 50, 60, np.inf]
+salary_bins = [0, 50000, 100000, 150000, np.inf]
+
+df['Age_Category'] = pd.cut(df['Age'], bins=age_bins, labels=['0-30', '30-40', '40-50', '50-60', '60+'])
+df['Salary_Category'] = pd.cut(df['EstimatedSalary'], bins=salary_bins, labels=['0-50k', '50k-100k', '100k-150k', '150k+'])
+
+# Calculate conditional probabilities
+cond_prob_age_purchase = df.groupby('Age_Category', observed=False)['Purchased'].mean()
+cond_prob_salary_purchase = df.groupby('Salary_Category', observed=False)['Purchased'].mean()
+
+print("Conditional Probabilities:")
+print("Age - Probability of Purchase:")
+print(cond_prob_age_purchase)
+
+```
+
+```{python}
+print("\nSalary - Probability of Purchase:")
+print(cond_prob_salary_purchase)
+```
+
+**Naive Bayes Classifier**
+
+The spotlight of our analysis is the implementation of a Naive Bayes classifier. We select 'Age' and 'EstimatedSalary' as features to predict the 'Purchased' outcome. After splitting the data into training and testing sets and standardizing the features, we train the classifier and evaluate its performance. The accuracy, confusion matrix, and classification report offer a comprehensive overview of the model's predictive capabilities.
+
+```{python}
+# Feature selection
+X = df[['Age', 'EstimatedSalary']]
+y = df['Purchased']
+
+# Splitting the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardize features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Apply Naive Bayes classifier
+nb_classifier = GaussianNB()
+nb_classifier.fit(X_train_scaled, y_train)
+
+# Make predictions on the test set
+y_pred = nb_classifier.predict(X_test_scaled)
+
+# Evaluate the performance of the classifier
+print("Naive Bayes Classifier Results:")
+print(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}")
+
+```
+
+```{python}
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+```
+
+```{python}
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+
+
+**Decision Boundary and Probability Surface**
+
+To visualize the classifier's decision-making process, we plot the decision boundary on a scatter plot of the training data. This boundary helps us understand how the model separates customers who make a purchase from those who do not. Additionally, we explore the probability surface, gaining insights into the regions where the model predicts a higher probability of purchase.
+
+```{python}
+# Function to plot decision boundary
+def plot_decision_boundary(X, y, model, title):
+    h = .02  # Step size in the mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.coolwarm, edgecolors='k', s=100)
+    plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors='black')  # Contour at the decision boundary
+    plt.title(title)
+    plt.xlabel('Age')
+    plt.ylabel('Estimated Salary')
+    plt.show()
+
+# Plot decision boundary of Naive Bayes classifier
+plot_decision_boundary(X_train_scaled, y_train, nb_classifier, "Decision Boundary of Naive Bayes Classifier")
+
+# Plotting probability surface
+def plot_probability_surface(model, X, y):
+    proba = model.predict_proba(X)
+    plt.figure(figsize=(12, 6))
+
+    # Plotting decision boundary
+    plot_decision_boundary(X, y, model, "Decision Boundary with Probabilities")
+
+    # Contour plot for probability of Purchase
+    plt.contourf(X[:, 0], X[:, 1], proba[:, 1], levels=10, cmap=plt.cm.coolwarm, alpha=0.6)
+    plt.colorbar(label='Probability of Purchase')
+    plt.title("Probability Surface")
+    plt.xlabel('Age')
+    plt.ylabel('Estimated Salary')
+    plt.show()
+
+```
+
+**Receiver Operating Characteristic (ROC) Curve**
+
+No analysis is complete without assessing the model's ability to discriminate between positive and negative instances. We construct an ROC curve, illustrating the trade-off between true positive rate and false positive rate. The area under the ROC curve (AUC-ROC) serves as a quantitative measure of the model's performance.
+
+
+```{python}
+# ROC curve
+fpr, tpr, thresholds = roc_curve(y_test, nb_classifier.predict_proba(X_test_scaled)[:, 1])
+roc_auc = auc(fpr, tpr)
+
+# Plot ROC curve
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+plt.show()
+```
+
+
+
+**Conclusion**
+
+In conclusion, our exploration of customer behavior data involving 400 clients has provided valuable insights into the factors influencing purchase decisions. Leveraging descriptive statistics and machine learning techniques, we gained a nuanced understanding of the dataset.
+
+The mean age of customers was found to be approximately 37.65 years, with an average estimated salary of $69,742.50. Moreover, our analysis revealed a 36% probability of a customer making a purchase and a 64% probability of no purchase.
+
+The application of a Naive Bayes classifier yielded remarkable results, with an accuracy rate of 94%. This signifies the model's proficiency in correctly predicting whether a customer will make a purchase or not. Furthermore, the Area Under the Receiver Operating Characteristic (ROC) Curve (AUC-ROC) reached an impressive 0.98, underscoring the classifier's robust discriminatory capabilities.
+
+These findings hold significant implications for businesses aiming to understand and predict customer behavior. By harnessing such insights, companies can tailor their marketing and sales strategies to effectively target potential customers, ultimately enhancing decision-making processes and driving business success.
+
+
+
+<div class="footer">
+
+
+  <hr>
+
+  <h3>Connect with me on GitHub</h3>
+  <p>Find more projects and articles on my [GitHub](https://github.com/gayatribkar).</p>
+</div>
+
