@@ -8,7 +8,7 @@ website:
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/gayatribkar
+        href: https://github.com/gayatribkar/machine_learning_blogs
       - icon: linkedin
         href: https://www.linkedin.com/in/gayatri-bhatambarekar/
 format:
